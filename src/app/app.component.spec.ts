@@ -1,6 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { ToolboxComponent } from './toolbox/toolbox.component';
+import { CoursesListComponent } from './courses-list/courses-list.component';
+import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
+import { FooterComponent } from './footer/footer.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -10,6 +16,12 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
+        HeaderComponent,
+        BreadcrumbsComponent,
+        ToolboxComponent,
+        CoursesListComponent,
+        CoursesListItemComponent,
+        FooterComponent,
       ],
     }).compileComponents();
   }));
@@ -24,12 +36,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('Courses');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to Courses!');
   });
 });
