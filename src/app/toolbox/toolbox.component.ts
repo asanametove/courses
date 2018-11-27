@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-toolbox',
+  selector: 'courses-toolbox',
   templateUrl: './toolbox.component.html',
 })
 export class ToolboxComponent {}

@@ -1,13 +1,7 @@
-export interface ICourse {
-  id: string;
-  title: string;
-  creationDate: Date;
-  duration: number;
-  description: string;
-}
+import { Durable, Identifiable } from './common.interfaces';
 
-export class Course implements ICourse {
-    static id = 0;
+export class Course implements Durable, Identifiable {
+    private static id = 0;
 
     constructor(
         public title: string,

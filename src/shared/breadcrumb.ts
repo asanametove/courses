@@ -1,10 +1,6 @@
-export interface IBreadcrumb {
-  title: string;
-  link: string;
-  isActive: boolean;
-}
+import { Routable } from './common.interfaces';
 
-export class Breadcrumb implements IBreadcrumb {
+export class Breadcrumb implements Routable {
     constructor(
         public title: string,
         public link: string,

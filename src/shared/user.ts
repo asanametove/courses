@@ -1,11 +1,7 @@
-export interface IUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-}
+import { Identifiable } from './common.interfaces';
 
-export class User implements IUser {
-    static id = 0;
+export class User implements Identifiable {
+    private static id = 0;
 
     constructor(
         public firstName: string,

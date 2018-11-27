@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CoursesListComponent } from './courses-list.component';
-import { CoursesListItemComponent } from '../courses-list-item/courses-list-item.component';
+import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
+import { ToolboxComponent } from '../toolbox/toolbox.component';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
@@ -12,6 +13,7 @@ describe('CoursesListComponent', () => {
       declarations: [
         CoursesListComponent,
         CoursesListItemComponent,
+        ToolboxComponent,
       ],
     })
     .compileComponents();

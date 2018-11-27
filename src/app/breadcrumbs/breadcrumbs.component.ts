@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Breadcrumb } from '../../shared/breadcrumb';
+import { Breadcrumb } from '@shared/breadcrumb';
 
 @Component({
-  selector: 'app-breadcrumbs',
+  selector: 'courses-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
 })
 export class BreadcrumbsComponent {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Course } from '../../shared/course';
+import { Course } from '@shared/course';
 
 @Component({
-  selector: 'app-courses-list',
+  selector: 'courses-list',
   templateUrl: './courses-list.component.html',
 })
 export class CoursesListComponent {
