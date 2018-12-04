@@ -1,0 +1,7 @@
+<section class="container mb-3">
+  <courses-toolbox></courses-toolbox>
+  <ul>
+    <courses-list-item *ngFor="let course of courses" [course]="course"></courses-list-item>
+  </ul>
+  <button class="btn w-100" (click)="loadMore()" *ngIf="isMoreAvailable()">Load more</button>
+</section>

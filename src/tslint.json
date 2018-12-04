@@ -4,14 +4,15 @@
         "directive-selector": [
             true,
             "attribute",
-            "app",
+            "courses",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "app",
+            "courses",
             "kebab-case"
-        ]
+        ],
+        "trailing-comma": [true, {"multiline": "always", "singleline": "never"}]
     }
 }
