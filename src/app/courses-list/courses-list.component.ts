@@ -32,4 +32,8 @@ export class CoursesListComponent {
   isMoreAvailable(): boolean {
     return this.rawData.length > this.itemsCount;
   }
+
+  onDelete(id): void {
+    this.rawData = this.rawData.filter((course) => course.id !== id);
+  }
 }
