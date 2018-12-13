@@ -20,7 +20,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@shared/*": ["src/shared/*"]
+      "@shared/*": ["src/app/shared/*"]
     }
   }
 }

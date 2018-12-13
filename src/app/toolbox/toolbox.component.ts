@@ -4,4 +4,10 @@ import { Component } from '@angular/core';
   selector: 'courses-toolbox',
   templateUrl: './toolbox.component.html',
 })
-export class ToolboxComponent {}
+export class ToolboxComponent {
+  query = '';
+
+  onSubmit(): void {
+    console.log(this.query);
+  }
+}
