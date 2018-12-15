@@ -1,32 +1,71 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CoursesListItemComponent } from './courses-list-item.component';
+import { Component } from '@angular/core';
+import { Course } from '@shared/course';
 
 describe('CoursesListItemComponent', () => {
-  let component: CoursesListItemComponent;
-  let fixture: ComponentFixture<CoursesListItemComponent>;
+  let hostComponent: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
+
+  @Component({
+    template: `
+      <courses-list-item
+        [course]="course" (deleteCourse)="onDelete($event)">
+      </courses-list-item>`,
+  })
+  class TestHostComponent {
+    removedItemId: string;
+    course = new Course('title', 1, 'description', new Date(2000, 0), '111');
+    onDelete(id: string): void { this.removedItemId = id; }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CoursesListItemComponent ],
+      declarations: [ CoursesListItemComponent, TestHostComponent ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CoursesListItemComponent);
-    component = fixture.componentInstance;
-    component.course = {
-      id: '1',
-      title: 'Title 1',
-      creationDate: new Date(),
-      duration: 31,
-      description: 'description3',
-    },
+    fixture = TestBed.createComponent(TestHostComponent);
+    hostComponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 
+  const findByInnerText = (tag: string, text: string): HTMLElement | void => [...fixture.nativeElement.querySelectorAll(tag)]
+    .find(({textContent}) => textContent === text);
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(hostComponent).toBeTruthy();
+  });
+
+  it('should display a title', () => {
+    const element: HTMLElement = fixture.nativeElement.querySelector('h5');
+    expect(element.textContent).toBe(hostComponent.course.title);
+  });
+
+  it('should display a duration', () => {
+    const duration = [hostComponent.course.duration, 'min'].join(' ');
+    expect(findByInnerText('span', duration)).toBeTruthy();
+  });
+
+  it('should display a formatted date', () => {
+    const dateString = 'Jan 1, 2000';
+    expect(findByInnerText('span', dateString)).toBeTruthy();
+  });
+
+  it('should display a description', () => {
+    const {description} = hostComponent.course;
+    expect(findByInnerText('p', description)).toBeTruthy();
+  });
+
+  it('should delete course using provided callback', () => {
+    const {id} = hostComponent.course;
+    const button = findByInnerText('button', 'Delete');
+    if (button) {
+      button.click();
+    }
+    expect(hostComponent.removedItemId).toBe(id);
   });
 });

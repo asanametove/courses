@@ -8,7 +8,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
+      declarations: [ LoginComponent ],
     })
     .compileComponents();
   }));
@@ -21,5 +21,15 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should log in', () => {
+    component.logIn();
+    expect(component.isLoggedIn).toBe(true);
+  });
+
+  it('should log out', () => {
+    component.logOut();
+    expect(component.isLoggedIn).toBe(false);
   });
 });

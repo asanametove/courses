@@ -24,16 +24,14 @@ export class CoursesListComponent {
   }
 
   loadMore(): void {
-    if (this.isMoreAvailable()) {
-      this.itemsCount += 3;
-    }
+    this.itemsCount += 3;
   }
 
   isMoreAvailable(): boolean {
     return this.rawData.length > this.itemsCount;
   }
 
-  onDelete(id): void {
+  onDelete(id: string): void {
     this.rawData = this.rawData.filter((course) => course.id !== id);
   }
 }
