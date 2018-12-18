@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { MockComponent } from 'ng-mocks';
 
 import { CoursesListComponent } from './courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
@@ -12,8 +14,8 @@ describe('CoursesListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         CoursesListComponent,
-        CoursesListItemComponent,
-        ToolboxComponent,
+        MockComponent(CoursesListItemComponent),
+        MockComponent(ToolboxComponent),
       ],
     })
     .compileComponents();
@@ -29,42 +31,42 @@ describe('CoursesListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should define courses raw data', () => {
-    expect(component.rawData).toBeDefined();
-    expect(component.rawData.length).toBeTruthy();
-  });
-
-  it('should return only first part of courses', () => {
-    expect(component.courses.length).not.toBe(component.rawData.length);
-    expect(component.rawData).toEqual(jasmine.arrayContaining(component.courses));
+  it('should create list item component for each course', () => {
+    const items = fixture.nativeElement.querySelectorAll('courses-list-item');
+    expect(items).toBeTruthy();
   });
 
   describe('#loadMore', () => {
-    it('should load more courses if they are available', () => {
-      const oldCount = component.itemsCount;
-      component.loadMore();
-      const newCount = component.itemsCount;
-      expect(oldCount < newCount).toBe(true);
+    const getLoadMoreButton = () => fixture.debugElement.query(By.css('button'));
+    const getCoursesList = () => fixture.nativeElement.querySelectorAll('courses-list-item');
+
+    it('should show button if more courses available', () => {
+      expect(getLoadMoreButton()).toBeTruthy();
     });
 
-    it('should not load more courses if they are not available', () => {
-      component.itemsCount = component.rawData.length;
-      const oldCount = component.itemsCount;
-      component.loadMore();
-      const newCount = component.itemsCount;
-      expect(oldCount).toBe(newCount);
+    it('should load more courses if they are available', () => {
+      const oldList = getCoursesList();
+
+      getLoadMoreButton().triggerEventHandler('click', null);
+      fixture.detectChanges();
+      const newList = getCoursesList();
+
+      expect(oldList.length).toBeLessThan(newList.length);
+    });
+
+    it('should hide button if more courses does not available', () => {
+      getLoadMoreButton().triggerEventHandler('click', null);
+      fixture.detectChanges();
+
+      expect(getLoadMoreButton()).toBeFalsy();
     });
   });
 
-  describe('#isMoreAvailable', () => {
-    it('should be true if more courses can be loaded', () => {
-      component.itemsCount = component.rawData.length - 1;
-      expect(component.isMoreAvailable()).toBe(true);
-    });
-
-    it('should be false if more courses can not be loaded', () => {
-      component.itemsCount = component.rawData.length + 1;
-      expect(component.isMoreAvailable()).toBe(false);
+  describe('#onDelete', () => {
+    it('should delete course with provided id', () => {
+      const [, course] = component.courses;
+      component.onDelete(course.id);
+      expect(component.courses).not.toContain(course);
     });
   });
 });
