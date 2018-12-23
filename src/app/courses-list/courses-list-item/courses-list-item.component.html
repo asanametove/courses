@@ -5,7 +5,7 @@
     <h5 class="mb-0 mr-2">{{course.title}}</h5>
     <fa-icon *ngIf="course.topRated" icon="star"></fa-icon>
     <div class="ml-auto">
-      <span class="mx-2">{{course.duration}} min</span>
+      <span class="mx-2">{{course.duration | duration}}</span>
       <span class="mx-2">{{course.creationDate | date}}</span>
     </div>
   </div>

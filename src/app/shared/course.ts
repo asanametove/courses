@@ -1,6 +1,6 @@
-import { Durable, Identifiable } from './common.interfaces';
+import { Durable, Identifiable, WithCreationDate } from './common.interfaces';
 
-export class Course implements Durable, Identifiable {
+export class Course implements Durable, Identifiable, WithCreationDate {
     private static id = 0;
 
     constructor(

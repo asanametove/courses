@@ -1,7 +1,7 @@
 <section class="container mb-3">
-  <courses-toolbox></courses-toolbox>
+  <courses-toolbox (search)="onSearch($event)"></courses-toolbox>
   <ul>
-    <courses-list-item *ngFor="let course of courses"
+    <courses-list-item *ngFor="let course of courses | orderByDate"
                        [course]="course"
                        (deleteCourse)="onDelete($event)"></courses-list-item>
   </ul>

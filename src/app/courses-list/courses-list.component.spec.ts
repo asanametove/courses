@@ -5,10 +5,21 @@ import { MockComponent } from 'ng-mocks';
 import { CoursesListComponent } from './courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
 import { ToolboxComponent } from '../toolbox/toolbox.component';
+import { FilterPipe } from './filter.pipe';
+import { Pipe, PipeTransform } from '@angular/core';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
   let fixture: ComponentFixture<CoursesListComponent>;
+
+  @Pipe({
+    name: 'orderByDate',
+  })
+  class OrderByDatePipeMock implements PipeTransform {
+    transform(list) {
+      return list;
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -16,6 +27,10 @@ describe('CoursesListComponent', () => {
         CoursesListComponent,
         MockComponent(CoursesListItemComponent),
         MockComponent(ToolboxComponent),
+        OrderByDatePipeMock,
+      ],
+      providers: [
+        {provide: FilterPipe, useValue: {transform: arg => arg}},
       ],
     })
     .compileComponents();

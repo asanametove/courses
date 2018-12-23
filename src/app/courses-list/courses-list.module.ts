@@ -8,6 +8,9 @@ import { CoursesListComponent } from './courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
 import { ToolboxComponent } from '../toolbox/toolbox.component';
 import { CoursesHighlightDirective } from './courses-highlight.directive';
+import { FilterPipe } from './filter.pipe';
+import { OrderByDatePipe } from './order-by-date.pipe';
+import { DurationPipe } from './duration.pipe';
 
 library.add(faStar);
 
@@ -17,6 +20,8 @@ library.add(faStar);
     CoursesListItemComponent,
     ToolboxComponent,
     CoursesHighlightDirective,
+    OrderByDatePipe,
+    DurationPipe,
   ],
   exports: [
     CoursesListComponent,
@@ -25,6 +30,9 @@ library.add(faStar);
     CommonModule,
     FormsModule,
     FontAwesomeModule,
+  ],
+  providers: [
+    FilterPipe,
   ],
 })
 export class CoursesListModule { }

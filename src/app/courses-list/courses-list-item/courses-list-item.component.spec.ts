@@ -1,15 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CoursesListItemComponent } from './courses-list-item.component';
-import { Component } from '@angular/core';
-import { Course } from '@shared/course';
-import { MockDirective, MockComponent } from 'ng-mocks';
-import { CoursesHighlightDirective } from '../courses-highlight.directive';
+import { Component, Pipe, PipeTransform } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MockPipes } from 'ng-mocks/dist/lib/mock-pipe/mock-pipe';
+import { MockDirective, MockComponent } from 'ng-mocks';
+
+import { Course } from '@shared/course';
+import { CoursesHighlightDirective } from '../courses-highlight.directive';
+import { CoursesListItemComponent } from './courses-list-item.component';
+import { OrderByDatePipe } from '../order-by-date.pipe';
 
 describe('CoursesListItemComponent', () => {
   let hostComponent: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
+
+  @Pipe({
+    name: 'duration',
+  })
+  class DurationPipeMock implements PipeTransform {
+    transform() {
+      return '1 min';
+    }
+  }
 
   @Component({
     template: `
@@ -30,6 +41,8 @@ describe('CoursesListItemComponent', () => {
         TestHostComponent,
         MockDirective(CoursesHighlightDirective),
         MockComponent(FaIconComponent),
+        MockPipes(OrderByDatePipe),
+        DurationPipeMock,
       ],
     })
     .compileComponents();
