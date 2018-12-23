@@ -3,6 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CoursesListItemComponent } from './courses-list-item.component';
 import { Component } from '@angular/core';
 import { Course } from '@shared/course';
+import { MockDirective, MockComponent } from 'ng-mocks';
+import { CoursesHighlightDirective } from '../courses-highlight.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 describe('CoursesListItemComponent', () => {
   let hostComponent: TestHostComponent;
@@ -22,7 +25,12 @@ describe('CoursesListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CoursesListItemComponent, TestHostComponent ],
+      declarations: [
+        CoursesListItemComponent,
+        TestHostComponent,
+        MockDirective(CoursesHighlightDirective),
+        MockComponent(FaIconComponent),
+      ],
     })
     .compileComponents();
   }));

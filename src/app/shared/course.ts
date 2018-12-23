@@ -9,5 +9,6 @@ export class Course implements Durable, Identifiable {
         public description: string,
         public creationDate = new Date(),
         public id = String(++Course.id),
+        public topRated = false,
     ) {}
 }

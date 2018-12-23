@@ -12,9 +12,9 @@ export class CoursesListComponent {
   constructor() {
     this.itemsCount = 3;
     this.rawData = [
-      new Course('Title 1', 3, 'description1'),
-      new Course('Title 2', 3, 'description2'),
-      new Course('Title 3', 3, 'description3'),
+      new Course('Title 1', 3, 'description1', new Date(2018, 11, 22)),
+      new Course('Title 2', 3, 'description2', undefined, undefined, true),
+      new Course('Title 3', 3, 'description3', new Date(2018, 11, 11)),
       new Course('Title 4', 3, 'description4'),
     ];
   }

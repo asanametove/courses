@@ -1,6 +1,9 @@
-<li class="card">
+<li class="card mb-3"
+    [coursesDateHighlight]="course.creationDate"
+    [ngClass]="{'bg-primary': course.topRated}">
   <div class="card-header d-flex">
-    <h5 class="mb-0">{{course.title}}</h5>
+    <h5 class="mb-0 mr-2">{{course.title}}</h5>
+    <fa-icon *ngIf="course.topRated" icon="star"></fa-icon>
     <div class="ml-auto">
       <span class="mx-2">{{course.duration}} min</span>
       <span class="mx-2">{{course.creationDate | date}}</span>
