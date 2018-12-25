@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[coursesDateHighlight]',
@@ -6,23 +6,31 @@ import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 export class CoursesHighlightDirective implements OnInit {
   @Input('coursesDateHighlight') creationDate: Date;
+  className: string;
 
   constructor(
     private el: ElementRef,
+    private renderer: Renderer2,
   ) {}
 
-  private static getDateOnly(date: Date): Date {
+  ngOnInit() {
+    const className = this.getClassName();
+    if (className) {
+      this.renderer.addClass(this.el.nativeElement, className);
+    }
+  }
+
+  private getDateOnly(date: Date): Date {
     return new Date(date.toDateString());
   }
 
-  ngOnInit() {
-    const {style} = this.el.nativeElement;
-    this.creationDate = CoursesHighlightDirective.getDateOnly(this.creationDate);
+  private getClassName(): string | void {
+    this.creationDate = this.getDateOnly(this.creationDate);
 
     if (this.isFuture()) {
-      style.borderColor = 'blue';
+      return 'border-primary';
     } else if (this.isFresh()) {
-      style.borderColor = 'green';
+      return 'border-success';
     }
   }
 
@@ -32,10 +40,10 @@ export class CoursesHighlightDirective implements OnInit {
   }
 
   private isFresh(): boolean {
-    const currentDate = CoursesHighlightDirective.getDateOnly(new Date());
+    const currentDate = this.getDateOnly(new Date());
     let oldCourseDate = new Date();
     oldCourseDate.setDate(oldCourseDate.getDate() - 14);
-    oldCourseDate = CoursesHighlightDirective.getDateOnly(oldCourseDate);
+    oldCourseDate = this.getDateOnly(oldCourseDate);
 
     return this.creationDate < currentDate
       && this.creationDate >= oldCourseDate;
