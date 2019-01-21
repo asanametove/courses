@@ -1,4 +1,4 @@
-<nav class="container">
+<nav class="container" *ngIf="loggedIn">
   <ul class="breadcrumb">
     <li class="breadcrumb-item" *ngFor="let crumb of crumbs">
       <a href={{crumb.link}}>{{crumb.title}}</a>

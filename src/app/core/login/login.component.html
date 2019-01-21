@@ -1,8 +1,13 @@
-<button type="button"
-        class="btn btn-primary"
-        *ngIf="!isLoggedIn"
-        (click)="logIn()">Log in</button>
-<button type="button"
-        class="btn btn-primary ml-2"
-        *ngIf="isLoggedIn"
-        (click)="logOut()">Log out</button>
+<section class="container mb-3 w-25">
+  <input type="text"
+         class="form-control mb-3"
+         placeholder="Username"
+         [(ngModel)]="username">
+  <input type="password"
+         class="form-control mb-3"
+         placeholder="Password"
+         [(ngModel)]="password">
+  <button type="button"
+          class="btn btn-primary"
+          (click)="logIn()">Log in</button>
+</section>
