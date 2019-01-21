@@ -9,3 +9,7 @@ export interface Identifiable {
 export interface Durable {
   duration: number;
 }
+
+export interface WithCreationDate {
+  creationDate: Date;
+}
