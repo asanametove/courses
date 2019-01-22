@@ -12,7 +12,7 @@ export class CoursesListComponent implements OnInit {
 
   itemsCount = 3;
 
-  rawData: Course[] = [];
+  private rawData: Course[] = [];
 
   constructor(
     private coursesService: CoursesService,

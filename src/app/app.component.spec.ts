@@ -10,7 +10,7 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule,
         CoursesListModule,
-        CoreModule,
+        CoreModule.forRoot(),
       ],
       declarations: [
         AppComponent,

@@ -17,11 +17,11 @@ export class LoginService {
     console.log('Logged out');
   }
 
-  isAuthenticated(): boolean {
+  isLoggedIn(): boolean {
     return !!localStorage.getItem(localStorageKeysMap.userInfo);
   }
 
-  getUserInfo(): string {
+  getUserInfo(): any {
     const userInfo = JSON.parse(localStorage.getItem(localStorageKeysMap.userInfo));
     console.log(userInfo);
     return userInfo;

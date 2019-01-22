@@ -1,10 +1,19 @@
 import { LoginComponent } from './login.component';
+import { LoginService } from './login.service';
+import { NavigationService } from '../navigation/navigation.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
+  let loginServiceMock: LoginService;
+  let navigationServiceMock: NavigationService;
 
   beforeEach(() => {
-    component = new LoginComponent();
+    loginServiceMock = jasmine.createSpyObj('loginService', ['logIn']);
+    navigationServiceMock = jasmine.createSpyObj('navigationService', ['navigateByUrl']);
+    component = new LoginComponent(
+      loginServiceMock,
+      navigationServiceMock,
+    );
   });
 
   it('should create', () => {
@@ -12,16 +21,20 @@ describe('LoginComponent', () => {
   });
 
   describe('#logIn', () => {
-    it('should log in', () => {
-      component.logIn();
-      expect(component.isLoggedIn).toBe(true);
-    });
-  });
+    it('should log in using service', () => {
+      const username = 'username';
+      const password = 'password';
+      Object.assign(component, { username, password });
 
-  describe('#logOut', () => {
-    it('should log out', () => {
-      component.logOut();
-      expect(component.isLoggedIn).toBe(false);
+      component.logIn();
+
+      expect(loginServiceMock.logIn).toHaveBeenCalledWith(username, password);
+    });
+
+    it('should navigate to the root', () => {
+      const { root } = NavigationService.routes;
+      component.logIn();
+      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(root);
     });
   });
 });

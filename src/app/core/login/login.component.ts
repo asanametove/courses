@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationService } from '../navigation/navigation.service';
 import { LoginService } from './login.service';
 
 @Component({
@@ -12,11 +12,12 @@ export class LoginComponent {
 
   constructor(
     private loginService: LoginService,
-    private router: Router,
+    private navigationService: NavigationService,
   ) {}
 
   logIn(): void {
+    const { root } = NavigationService.routes;
     this.loginService.logIn(this.username, this.password);
-    this.router.navigateByUrl('/');
+    this.navigationService.navigateByUrl(root);
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../login/login.service';
-import { Router } from '@angular/router';
+import { NavigationService } from '../navigation/navigation.service';
 
 @Component({
   selector: 'courses-header',
@@ -9,15 +9,16 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   constructor(
     private loginService: LoginService,
-    private router: Router,
+    private navigationService: NavigationService,
   ) {}
 
   get loggedIn() {
-    return this.loginService.isAuthenticated();
+    return this.loginService.isLoggedIn();
   }
 
   get loginShown() {
-    return !this.loggedIn && this.router.url !== '/login';
+    const { login } = NavigationService.pages;
+    return !this.loggedIn && !this.navigationService.isOnPage(login);
   }
 
   logOut() {

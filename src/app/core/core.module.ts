@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
 import { FormsModule } from '@angular/forms';
+import { NavigationService } from './navigation/navigation.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,10 @@ export class CoreModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: CoreModule,
-      providers: [LoginService],
+      providers: [
+        LoginService,
+        NavigationService,
+      ],
     };
   }
 }

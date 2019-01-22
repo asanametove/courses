@@ -18,6 +18,6 @@ export class BreadcrumbsComponent {
   ) {}
 
   get loggedIn() {
-    return this.loginService.isAuthenticated();
+    return this.loginService.isLoggedIn();
   }
 }
