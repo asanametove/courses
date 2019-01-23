@@ -11,4 +11,15 @@ export class Course implements Durable, Identifiable, WithCreationDate {
         public id = String(++Course.id),
         public topRated = false,
     ) {}
+
+    update(payload: CourseUpdateInfo) {
+      Object.assign(this, payload);
+    }
+}
+
+export interface CourseUpdateInfo {
+  title: string;
+  duration: number;
+  description: string;
+  topRated: boolean;
 }

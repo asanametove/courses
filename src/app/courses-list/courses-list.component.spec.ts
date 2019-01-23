@@ -7,10 +7,14 @@ import { CoursesListItemComponent } from './courses-list-item/courses-list-item.
 import { ToolboxComponent } from '../toolbox/toolbox.component';
 import { FilterPipe } from './filter.pipe';
 import { Pipe, PipeTransform } from '@angular/core';
+import { CoursesService } from './courses-list-item/courses.service';
+import { Course } from '@shared/course';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
   let fixture: ComponentFixture<CoursesListComponent>;
+  let coursesServiceMock: jasmine.SpyObj<CoursesService>;
+  let courses: Course[];
 
   @Pipe({
     name: 'orderByDate',
@@ -22,6 +26,16 @@ describe('CoursesListComponent', () => {
   }
 
   beforeEach(async(() => {
+    courses = [
+      new Course('Title 1', 123, 'description1', new Date(2018, 11, 22)),
+      new Course('Title 2', 3, 'description2', undefined, undefined, true),
+      new Course('Title 3', 3, 'description3', new Date(2018, 11, 11)),
+      new Course('Title 4', 3, 'description4'),
+    ];
+
+    coursesServiceMock = jasmine.createSpyObj('CoursesService', ['getCourses', 'removeCourse']);
+    coursesServiceMock.getCourses.and.returnValue(courses);
+
     TestBed.configureTestingModule({
       declarations: [
         CoursesListComponent,
@@ -30,7 +44,8 @@ describe('CoursesListComponent', () => {
         OrderByDatePipeMock,
       ],
       providers: [
-        {provide: FilterPipe, useValue: {transform: arg => arg}},
+        { provide: FilterPipe, useValue: { transform: arg => arg } },
+        { provide: CoursesService, useValue: coursesServiceMock },
       ],
     })
     .compileComponents();
@@ -49,6 +64,18 @@ describe('CoursesListComponent', () => {
   it('should create list item component for each course', () => {
     const items = fixture.nativeElement.querySelectorAll('courses-list-item');
     expect(items).toBeTruthy();
+  });
+
+  describe('#ngOnInit', () => {
+    it('should load courses using service', () => {
+      component.ngOnInit();
+      expect(coursesServiceMock.getCourses).toHaveBeenCalledWith();
+    });
+
+    it('should save loaded courses', () => {
+      component.ngOnInit();
+      expect(courses).toEqual(jasmine.arrayContaining(component.courses));
+    });
   });
 
   describe('#loadMore', () => {
@@ -78,10 +105,43 @@ describe('CoursesListComponent', () => {
   });
 
   describe('#onDelete', () => {
-    it('should delete course with provided id', () => {
-      const [, course] = component.courses;
-      component.onDelete(course.id);
-      expect(component.courses).not.toContain(course);
+    let course: Course;
+
+    beforeEach(() => {
+      [, course] = component.courses;
+      coursesServiceMock.getCourses.calls.reset();
+    });
+
+    describe('if confirmed', () => {
+      beforeEach(() => {
+        spyOn(window, 'confirm').and.returnValue(true);
+      });
+
+      it('should delete course with provided id', () => {
+        component.onDelete(course.id);
+        expect(coursesServiceMock.removeCourse).toHaveBeenCalledWith(course.id);
+      });
+
+      it('should load courses', () => {
+        component.onDelete(course.id);
+        expect(coursesServiceMock.getCourses).toHaveBeenCalledWith();
+      });
+    });
+
+    describe('if declined', () => {
+      beforeEach(() => {
+        spyOn(window, 'confirm').and.returnValue(false);
+      });
+
+      it('should not delete course with provided id', () => {
+        component.onDelete(course.id);
+        expect(coursesServiceMock.removeCourse).not.toHaveBeenCalled();
+      });
+
+      it('should not load courses', () => {
+        component.onDelete(course.id);
+        expect(coursesServiceMock.getCourses).not.toHaveBeenCalled();
+      });
     });
   });
 });

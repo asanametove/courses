@@ -1,26 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Course } from '@shared/course';
 import { FilterPipe } from './filter.pipe';
+import { CoursesService } from './courses-list-item/courses.service';
 
 @Component({
   selector: 'courses-list',
   templateUrl: './courses-list.component.html',
 })
-export class CoursesListComponent {
+export class CoursesListComponent implements OnInit {
   query: string;
 
   itemsCount = 3;
 
-  rawData = [
-    new Course('Title 1', 123, 'description1', new Date(2018, 11, 22)),
-    new Course('Title 2', 3, 'description2', undefined, undefined, true),
-    new Course('Title 3', 3, 'description3', new Date(2018, 11, 11)),
-    new Course('Title 4', 3, 'description4'),
-  ];
+  private rawData: Course[] = [];
 
   constructor(
-    public filterPipe: FilterPipe<Course>,
+    private coursesService: CoursesService,
+    private filterPipe: FilterPipe<Course>,
   ) {}
+
+  private loadCourses(): void {
+    this.rawData = this.coursesService.getCourses();
+  }
+
+  ngOnInit() {
+    this.loadCourses();
+  }
 
   get courses(): Course[] {
     return this.filterPipe.transform(this.rawData, this.query, 'title')
@@ -36,7 +41,10 @@ export class CoursesListComponent {
   }
 
   onDelete(id: string): void {
-    this.rawData = this.rawData.filter((course) => course.id !== id);
+    if (confirm('Do you really want to delete this course?')) {
+      this.coursesService.removeCourse(id);
+      this.loadCourses();
+    }
   }
 
   onSearch(query: string): void {

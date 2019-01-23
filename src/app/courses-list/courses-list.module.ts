@@ -11,6 +11,7 @@ import { CoursesHighlightDirective } from './courses-highlight.directive';
 import { FilterPipe } from './filter.pipe';
 import { OrderByDatePipe } from './order-by-date.pipe';
 import { DurationPipe } from './duration.pipe';
+import { CoursesService } from './courses-list-item/courses.service';
 
 library.add(faStar);
 
@@ -33,6 +34,7 @@ library.add(faStar);
   ],
   providers: [
     FilterPipe,
+    CoursesService,
   ],
 })
 export class CoursesListModule { }
