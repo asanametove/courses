@@ -12,6 +12,7 @@ import { FilterPipe } from './filter.pipe';
 import { OrderByDatePipe } from './order-by-date.pipe';
 import { DurationPipe } from './duration.pipe';
 import { CoursesService } from './courses-list-item/courses.service';
+import { RouterModule } from '@angular/router';
 
 library.add(faStar);
 
@@ -23,12 +24,14 @@ library.add(faStar);
     CoursesHighlightDirective,
     OrderByDatePipe,
     DurationPipe,
+    FilterPipe,
   ],
   exports: [
     CoursesListComponent,
   ],
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     FontAwesomeModule,
   ],
