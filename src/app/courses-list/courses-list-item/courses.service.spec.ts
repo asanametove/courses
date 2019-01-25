@@ -5,6 +5,8 @@ describe('CoursesService', () => {
   let service: CoursesService;
   let course: Course;
 
+  const fakeDate = '2000-01-01';
+
   beforeEach(() => {
     service = new CoursesService();
     [, course] = service.getCourses();
@@ -23,7 +25,7 @@ describe('CoursesService', () => {
   describe('#createCourse', () => {
     it('should add new course to the courses list', () => {
       const title = 'New title';
-      service.createCourse(title, 1, 'description');
+      service.createCourse(title, 1, 'description', new Date(fakeDate));
 
       const newCourse = service.getCourses().pop();
       expect(newCourse.title).toBe(title);
@@ -31,7 +33,7 @@ describe('CoursesService', () => {
 
     it('should change courses list reference', () => {
       const oldRef = service.getCourses();
-      service.createCourse('title', 1, 'description');
+      service.createCourse('title', 1, 'description', new Date(fakeDate));
 
       expect(service.getCourses()).not.toBe(oldRef);
     });

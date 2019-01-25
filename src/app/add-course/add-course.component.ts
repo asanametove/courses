@@ -21,8 +21,8 @@ export class AddCourseComponent {
   ) {}
 
   onSave() {
-    const { title, duration, description } = this;
-    this.coursesService.createCourse(title, duration, description);
+    const { title, duration, description, date } = this;
+    this.coursesService.createCourse(title, duration, description, new Date(date));
 
     const { courses } = NavigationService.routes;
     this.navigationService.navigateByUrl(courses);

@@ -47,11 +47,12 @@ describe('AddCourseComponent', () => {
       const title = 'title';
       const description = 'description';
       const duration = 1;
-      Object.assign(component, { title, duration, description });
+      const date = '1995-12-17';
+      Object.assign(component, { title, duration, description, date });
 
       component.onSave();
 
-      expect(coursesServiceMock.createCourse).toHaveBeenCalledWith(title, duration, description);
+      expect(coursesServiceMock.createCourse).toHaveBeenCalledWith(title, duration, description, new Date(date));
     });
 
     it('should navigate to courses', () => {
