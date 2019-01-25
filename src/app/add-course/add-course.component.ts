@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouteName } from '@shared/route-name';
 import { CoursesService } from '../courses-list/courses-list-item/courses.service';
 import { NavigationService } from '../core/navigation/navigation.service';
 
@@ -24,13 +25,11 @@ export class AddCourseComponent {
     const { title, duration, description, date } = this;
     this.coursesService.createCourse(title, duration, description, new Date(date));
 
-    const { courses } = NavigationService.routes;
-    this.navigationService.navigateByUrl(courses);
+    this.navigationService.navigateByUrl(RouteName.Courses);
   }
 
   onCancel() {
-    const { root } = NavigationService.routes;
-    this.navigationService.navigateByUrl(root);
+    this.navigationService.navigateByUrl(RouteName.Root);
   }
 
 }

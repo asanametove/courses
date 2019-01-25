@@ -4,6 +4,7 @@ import { AddCourseComponent } from './add-course.component';
 import { FormsModule } from '@angular/forms';
 import { CoursesService } from '../courses-list/courses-list-item/courses.service';
 import { NavigationService } from '../core/navigation/navigation.service';
+import { RouteName } from '@shared/route-name';
 
 describe('AddCourseComponent', () => {
   let component: AddCourseComponent;
@@ -56,17 +57,15 @@ describe('AddCourseComponent', () => {
     });
 
     it('should navigate to courses', () => {
-      const { courses } = NavigationService.routes;
       component.onSave();
-      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(courses);
+      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Courses);
     });
   });
 
   describe('#onCancel', () => {
     it('should navigate to root', () => {
-      const { root } = NavigationService.routes;
       component.onCancel();
-      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(root);
+      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Root);
     });
   });
 });

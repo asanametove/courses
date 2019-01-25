@@ -1,4 +1,5 @@
 import { NavigationService } from './navigation.service';
+import { RouteName } from '@shared/route-name';
 
 describe('NavigationService', () => {
   let service: NavigationService;
@@ -6,7 +7,7 @@ describe('NavigationService', () => {
 
   beforeEach(() => {
     routerMock = {
-      url: '/',
+      url: RouteName.Login,
       navigateByUrl: jasmine.createSpy('Router#navigateByUrl'),
     };
 
@@ -19,21 +20,18 @@ describe('NavigationService', () => {
 
   describe('#isOnPage', () => {
     it('should be truthy if current page provided', () => {
-      routerMock.url = NavigationService.routes.root;
-      expect(service.isOnPage(NavigationService.pages.root)).toBeTruthy();
+      expect(service.isOnPage(RouteName.Login)).toBeTruthy();
     });
 
     it('should be falsy if another page provided', () => {
-      routerMock.url = NavigationService.routes.login;
-      expect(service.isOnPage(NavigationService.pages.root)).toBeFalsy();
+      expect(service.isOnPage(RouteName.Courses)).toBeFalsy();
     });
   });
 
   describe('#navigateByUrl', () => {
     it('should navigate to provided page', () => {
-      const { login } = NavigationService.pages;
-      service.navigateByUrl(login);
-      expect(routerMock.navigateByUrl).toHaveBeenCalledWith(NavigationService.routes[login]);
+      service.navigateByUrl(RouteName.Login);
+      expect(routerMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Login);
     });
   });
 });

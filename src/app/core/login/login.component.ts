@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouteName } from '@shared/route-name';
 import { NavigationService } from '../navigation/navigation.service';
 import { LoginService } from './login.service';
 
@@ -16,8 +17,7 @@ export class LoginComponent {
   ) {}
 
   logIn(): void {
-    const { root } = NavigationService.routes;
     this.loginService.logIn(this.username, this.password);
-    this.navigationService.navigateByUrl(root);
+    this.navigationService.navigateByUrl(RouteName.Root);
   }
 }
