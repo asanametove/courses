@@ -14,10 +14,10 @@ export class CoursesService {
     return this.courses;
   }
 
-  createCourse(title: string, duration: number, description: string): void {
+  createCourse(title: string, duration: number, description: string, date: Date): void {
     this.courses = [
       ...this.courses,
-      new Course(title, duration, description),
+      new Course(title, duration, description, date),
     ];
   }
 
