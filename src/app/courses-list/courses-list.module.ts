@@ -7,10 +7,10 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { CoursesListComponent } from './courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
 import { ToolboxComponent } from '../toolbox/toolbox.component';
-import { CoursesHighlightDirective } from './courses-highlight.directive';
-import { FilterPipe } from './filter.pipe';
-import { OrderByDatePipe } from './order-by-date.pipe';
-import { DurationPipe } from './duration.pipe';
+import { CoursesHighlightDirective } from './directives/courses-highlight.directive';
+import { FilterPipe } from './pipes/filter.pipe';
+import { OrderByDatePipe } from './pipes/order-by-date.pipe';
+import { DurationPipe } from './pipes/duration.pipe';
 import { CoursesService } from './courses-list-item/courses.service';
 import { RouterModule } from '@angular/router';
 

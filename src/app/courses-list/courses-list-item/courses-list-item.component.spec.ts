@@ -5,9 +5,9 @@ import { MockPipes } from 'ng-mocks/dist/lib/mock-pipe/mock-pipe';
 import { MockDirective, MockComponent } from 'ng-mocks';
 
 import { Course } from '@shared/course';
-import { CoursesHighlightDirective } from '../courses-highlight.directive';
+import { CoursesHighlightDirective } from '../directives/courses-highlight.directive';
 import { CoursesListItemComponent } from './courses-list-item.component';
-import { OrderByDatePipe } from '../order-by-date.pipe';
+import { OrderByDatePipe } from '../pipes/order-by-date.pipe';
 
 describe('CoursesListItemComponent', () => {
   let hostComponent: TestHostComponent;

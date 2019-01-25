@@ -5,7 +5,7 @@ import { MockComponent } from 'ng-mocks';
 import { CoursesListComponent } from './courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
 import { ToolboxComponent } from '../toolbox/toolbox.component';
-import { FilterPipe } from './filter.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
 import { Pipe, PipeTransform } from '@angular/core';
 import { CoursesService } from './courses-list-item/courses.service';
 import { Course } from '@shared/course';

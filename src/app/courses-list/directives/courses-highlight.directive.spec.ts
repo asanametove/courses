@@ -7,28 +7,7 @@ describe('DateHighlightDirective', () => {
   let renderer: Renderer2;
 
   beforeEach(() => {
-    renderer = jasmine.createSpyObj('renderer2Mock', [
-      'destroy',
-      'createElement',
-      'createComment',
-      'createText',
-      'destroyNode',
-      'appendChild',
-      'insertBefore',
-      'removeChild',
-      'selectRootElement',
-      'parentNode',
-      'nextSibling',
-      'setAttribute',
-      'removeAttribute',
-      'addClass',
-      'removeClass',
-      'setStyle',
-      'removeStyle',
-      'setProperty',
-      'setValue',
-      'listen',
-    ]);
+    renderer = jasmine.createSpyObj('renderer2Mock', [ 'addClass' ]);
     directive = new CoursesHighlightDirective(
       new ElementRef(nativeElement),
       renderer,
