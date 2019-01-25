@@ -2,9 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddCourseComponent } from './add-course.component';
 import { FormsModule } from '@angular/forms';
-import { CoursesService } from '../courses-list/courses-list-item/courses.service';
-import { NavigationService } from '../core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
+import { CoursesService } from '../core/courses/courses.service';
+import { NavigationService } from '../core/navigation/navigation.service';
 
 describe('AddCourseComponent', () => {
   let component: AddCourseComponent;

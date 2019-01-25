@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouteName } from '@shared/route-name';
-import { CoursesService } from '../courses-list/courses-list-item/courses.service';
+import { CoursesService } from '../core/courses/courses.service';
 import { NavigationService } from '../core/navigation/navigation.service';
 
 @Component({

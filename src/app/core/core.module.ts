@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
 import { FormsModule } from '@angular/forms';
 import { NavigationService } from './navigation/navigation.service';
+import { CoursesService } from './courses/courses.service';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ export class CoreModule {
       providers: [
         LoginService,
         NavigationService,
+        CoursesService,
       ],
     };
   }

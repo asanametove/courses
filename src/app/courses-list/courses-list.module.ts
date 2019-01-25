@@ -11,7 +11,6 @@ import { CoursesHighlightDirective } from './directives/courses-highlight.direct
 import { FilterPipe } from './pipes/filter.pipe';
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
-import { CoursesService } from './courses-list-item/courses.service';
 import { RouterModule } from '@angular/router';
 
 library.add(faStar);
@@ -37,7 +36,6 @@ library.add(faStar);
   ],
   providers: [
     FilterPipe,
-    CoursesService,
   ],
 })
 export class CoursesListModule { }
