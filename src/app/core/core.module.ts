@@ -10,6 +10,7 @@ import { LoginService } from './login/login.service';
 import { FormsModule } from '@angular/forms';
 import { NavigationService } from './navigation/navigation.service';
 import { CoursesService } from './courses/courses.service';
+import { UtilsModule } from '../utils/utils.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { CoursesService } from './courses/courses.service';
     CommonModule,
     RouterModule,
     FormsModule,
+    UtilsModule,
   ],
   exports: [
     HeaderComponent,

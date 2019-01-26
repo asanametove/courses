@@ -1,4 +1,5 @@
 import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { DateTimeService } from 'src/app/utils/date-time-service';
 
 @Directive({
   selector: '[coursesDateHighlight]',
@@ -6,11 +7,11 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 export class CoursesHighlightDirective implements OnInit {
   @Input('coursesDateHighlight') creationDate: Date;
-  className: string;
 
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
+    private dateTimeService: DateTimeService,
   ) {}
 
   ngOnInit() {
@@ -20,32 +21,13 @@ export class CoursesHighlightDirective implements OnInit {
     }
   }
 
-  private getDateOnly(date: Date): Date {
-    return new Date(date.toDateString());
-  }
-
   private getClassName(): string | void {
-    this.creationDate = this.getDateOnly(this.creationDate);
+    this.creationDate = this.dateTimeService.getDateOnly(this.creationDate);
 
-    if (this.isFuture()) {
+    if (this.dateTimeService.isFutureDate(this.creationDate)) {
       return 'border-primary';
-    } else if (this.isFresh()) {
+    } else if (this.dateTimeService.isDateInRange(this.creationDate, 15, 0)) {
       return 'border-success';
     }
-  }
-
-  private isFuture(): boolean {
-    const currentDate = new Date();
-    return this.creationDate > currentDate;
-  }
-
-  private isFresh(): boolean {
-    const currentDate = this.getDateOnly(new Date());
-    let oldCourseDate = new Date();
-    oldCourseDate.setDate(oldCourseDate.getDate() - 14);
-    oldCourseDate = this.getDateOnly(oldCourseDate);
-
-    return this.creationDate < currentDate
-      && this.creationDate >= oldCourseDate;
   }
 }

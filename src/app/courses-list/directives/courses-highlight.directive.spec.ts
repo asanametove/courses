@@ -1,24 +1,26 @@
 import { CoursesHighlightDirective } from './courses-highlight.directive';
 import { ElementRef, Renderer2 } from '@angular/core';
+import { DateTimeService } from 'src/app/utils/date-time-service';
 
-describe('DateHighlightDirective', () => {
+describe('CoursesHighlightDirective', () => {
   const nativeElement = 'nativeElement';
   let directive: CoursesHighlightDirective;
   let renderer: Renderer2;
+  let dateTimeServiceMock: jasmine.SpyObj<DateTimeService>;
 
   beforeEach(() => {
-    renderer = jasmine.createSpyObj('renderer2Mock', [ 'addClass' ]);
+    renderer = jasmine.createSpyObj('renderer2Mock', ['addClass']);
+    dateTimeServiceMock = jasmine.createSpyObj('dateTimeServiceMock', [
+      'getDateOnly',
+      'isFutureDate',
+      'isDateInRange',
+    ]);
+
     directive = new CoursesHighlightDirective(
       new ElementRef(nativeElement),
       renderer,
+      dateTimeServiceMock,
     );
-
-    jasmine.clock().install();
-    jasmine.clock().mockDate(new Date(2000, 1, 20));
-  });
-
-  afterEach(() => {
-    jasmine.clock().uninstall();
   });
 
   it('should create an instance', () => {
@@ -26,39 +28,43 @@ describe('DateHighlightDirective', () => {
   });
 
   describe('#ngOnInit', () => {
+    const creationDate = {} as Date;
+
+    beforeEach(() => {
+      dateTimeServiceMock.getDateOnly.and.returnValue(creationDate);
+      dateTimeServiceMock.isFutureDate.and.returnValue(false);
+      dateTimeServiceMock.isDateInRange.and.returnValue(false);
+    });
+
     it('should set border color to BLUE if future date', () => {
-      directive.creationDate = new Date(2000, 2, 1);
+      dateTimeServiceMock.isFutureDate.and.returnValue(true);
       directive.ngOnInit();
 
       expect(renderer.addClass).toHaveBeenCalledWith(nativeElement, 'border-primary');
+      expect(dateTimeServiceMock.isFutureDate).toHaveBeenCalledWith(creationDate);
+      expect(dateTimeServiceMock.isDateInRange).not.toHaveBeenCalled();
     });
 
     it('should set border color to GREEN if creation date and current date diff not greater than 14', () => {
-      directive.creationDate = new Date(2000, 1, 6);
+      dateTimeServiceMock.isDateInRange.and.returnValue(true);
       directive.ngOnInit();
 
       expect(renderer.addClass).toHaveBeenCalledWith(nativeElement, 'border-success');
+      expect(dateTimeServiceMock.isDateInRange).toHaveBeenCalledWith(creationDate, 15, 0);
     });
 
-    it('should not set border color if creation date and current date diff greater than 14', () => {
-      directive.creationDate = new Date(2000, 1, 5);
+    it('should not set border color for another dates', () => {
       directive.ngOnInit();
-
       expect(renderer.addClass).not.toHaveBeenCalled();
     });
 
-    it('should not set border color for the same creation and current date ', () => {
-      directive.creationDate = new Date(2000, 1, 20);
+    it('should get only date from input data', () => {
+      const originalCreationDate = directive.creationDate = {} as Date;
+
       directive.ngOnInit();
 
-      expect(renderer.addClass).not.toHaveBeenCalled();
-    });
-
-    it('should make calculations based only on date', () => {
-      directive.creationDate = new Date(2000, 1, 1, 1);
-      directive.ngOnInit();
-
-      expect(renderer.addClass).not.toHaveBeenCalled();
+      expect(dateTimeServiceMock.getDateOnly).toHaveBeenCalledWith(originalCreationDate);
+      expect(directive.creationDate).toBe(creationDate);
     });
   });
 });
