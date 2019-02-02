@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddCourseComponent } from './add-course.component';
+import { CreateCourseComponent } from './create-course.component';
 import { FormsModule } from '@angular/forms';
 import { RouteName } from '@shared/route-name';
 import { CoursesService } from '../core/courses/courses.service';
 import { NavigationService } from '../core/navigation/navigation.service';
 
 describe('AddCourseComponent', () => {
-  let component: AddCourseComponent;
-  let fixture: ComponentFixture<AddCourseComponent>;
+  let component: CreateCourseComponent;
+  let fixture: ComponentFixture<CreateCourseComponent>;
 
   let coursesServiceMock: {
     createCourse: jasmine.Spy,
@@ -23,7 +23,7 @@ describe('AddCourseComponent', () => {
     navigationServiceMock = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
 
     TestBed.configureTestingModule({
-      declarations: [ AddCourseComponent ],
+      declarations: [ CreateCourseComponent ],
       imports: [ FormsModule ],
       providers: [
         { provide: CoursesService, useValue: coursesServiceMock },
@@ -34,7 +34,7 @@ describe('AddCourseComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddCourseComponent);
+    fixture = TestBed.createComponent(CreateCourseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

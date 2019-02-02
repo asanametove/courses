@@ -4,11 +4,11 @@ import { CoursesService } from '../core/courses/courses.service';
 import { NavigationService } from '../core/navigation/navigation.service';
 
 @Component({
-  selector: 'courses-add-course',
-  templateUrl: './add-course.component.html',
-  styleUrls: ['./add-course.component.scss'],
+  selector: 'courses-create-course',
+  templateUrl: './create-course.component.html',
+  styleUrls: ['./create-course.component.scss'],
 })
-export class AddCourseComponent {
+export class CreateCourseComponent {
 
   title: string;
   description: string;
