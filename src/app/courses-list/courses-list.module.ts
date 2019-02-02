@@ -12,6 +12,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
 import { CoursesRoutingModule } from './courses-routing.module';
+import { EditCourseComponent } from './edit-course/edit-course.component';
 
 library.add(faStar);
 
@@ -24,6 +25,7 @@ library.add(faStar);
     OrderByDatePipe,
     DurationPipe,
     FilterPipe,
+    EditCourseComponent,
   ],
   exports: [
     CoursesListComponent,

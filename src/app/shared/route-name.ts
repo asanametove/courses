@@ -2,7 +2,7 @@ export enum RouteName {
   Root = '',
   Login = 'login',
   Courses = 'courses',
-  NewCourse = 'new',
-  EditCourse = ':id',
+  NewCourse = 'courses/new',
+  EditCourse = 'courses/:id',
   NotDefined = '**',
 }
