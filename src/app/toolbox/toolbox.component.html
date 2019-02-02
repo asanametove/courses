@@ -3,5 +3,5 @@
     <input type="text" class="form-control" name="query" [(ngModel)]="query">
     <button type="submit" class="btn btn-primary ml-2">Search</button>
   </div>
-  <a routerLink="/add-course" class="btn btn-primary ml-auto">Add course</a>
+  <a [routerLink]="createCourseLink" class="btn btn-primary ml-auto">Add course</a>
 </form>

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoursesListModule } from './courses-list/courses-list.module';
 import { CoreModule } from './core/core.module';
-import { CreateCourseComponent } from './create-course/create-course.component';
+import { CreateCourseComponent } from './courses-list/create-course/create-course.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -15,10 +15,10 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     CoursesListModule,
     CoreModule.forRoot(),
     FormsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

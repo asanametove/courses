@@ -11,7 +11,7 @@ import { CoursesHighlightDirective } from './directives/courses-highlight.direct
 import { FilterPipe } from './pipes/filter.pipe';
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
-import { RouterModule } from '@angular/router';
+import { CoursesRoutingModule } from './courses-routing.module';
 
 library.add(faStar);
 
@@ -30,9 +30,9 @@ library.add(faStar);
   ],
   imports: [
     CommonModule,
-    RouterModule,
     FormsModule,
     FontAwesomeModule,
+    CoursesRoutingModule,
   ],
   providers: [
     FilterPipe,
