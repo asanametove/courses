@@ -18,7 +18,6 @@
       "dom"
     ],
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "paths": {
       "@shared/*": ["src/app/shared/*"],
       "@core/*": ["src/app/core/*"]

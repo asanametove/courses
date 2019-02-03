@@ -4,11 +4,12 @@ import { RouteName } from '@shared/route-name';
 import { CreateCourseComponent } from './create-course/create-course.component';
 import { CoursesListComponent } from './courses-list.component';
 import { EditCourseComponent } from './edit-course/edit-course.component';
+import { LoginGuard } from '@core/login/login.guard';
 
 const routes: Routes = [
-  { path: RouteName.Courses, component: CoursesListComponent },
-  { path: RouteName.NewCourse, component: CreateCourseComponent },
-  { path: RouteName.EditCourse, component: EditCourseComponent },
+  { path: RouteName.Courses, component: CoursesListComponent, canActivate: [ LoginGuard] },
+  { path: RouteName.NewCourse, component: CreateCourseComponent, canActivate: [ LoginGuard] },
+  { path: RouteName.EditCourse, component: EditCourseComponent, canActivate: [ LoginGuard] },
 ];
 
 @NgModule({
