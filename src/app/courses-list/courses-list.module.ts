@@ -13,6 +13,8 @@ import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
 import { CoursesRoutingModule } from './courses-routing.module';
 import { EditCourseComponent } from './edit-course/edit-course.component';
+import { EditCourseFormComponent } from './edit-course-form/edit-course-form.component';
+import { CreateCourseComponent } from './create-course/create-course.component';
 
 library.add(faStar);
 
@@ -20,12 +22,14 @@ library.add(faStar);
   declarations: [
     CoursesListComponent,
     CoursesListItemComponent,
+    CreateCourseComponent,
     ToolboxComponent,
     CoursesHighlightDirective,
     OrderByDatePipe,
     DurationPipe,
     FilterPipe,
     EditCourseComponent,
+    EditCourseFormComponent,
   ],
   exports: [
     CoursesListComponent,

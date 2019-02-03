@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouteName } from '@shared/route-name';
 import { CoursesService } from '@core/courses/courses.service';
 import { NavigationService } from '@core/navigation/navigation.service';
+import { CourseUpdateInfo } from '@shared/course';
 
 @Component({
   selector: 'courses-create-course',
@@ -10,19 +11,12 @@ import { NavigationService } from '@core/navigation/navigation.service';
 })
 export class CreateCourseComponent {
 
-  title: string;
-  description: string;
-  date: string;
-  duration: number;
-  authors: string;
-
   constructor(
     private coursesService: CoursesService,
     private navigationService: NavigationService,
   ) {}
 
-  onSave() {
-    const { title, duration, description, date } = this;
+  onSave({ title, duration, description, date }: CourseUpdateInfo) {
     this.coursesService.createCourse(title, duration, description, new Date(date));
 
     this.navigationService.navigateByUrl(RouteName.Courses);

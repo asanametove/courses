@@ -1,0 +1,57 @@
+<form (ngSubmit)="onSave()">
+
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text"
+           class="form-control"
+           id="title"
+           placeholder="Enter title"
+           name="title"
+           [(ngModel)]="course.title"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control"
+              id="description"
+              rows="3"
+              name="description"
+              [(ngModel)]="course.description"
+    ></textarea>
+  </div>
+
+  <div class="form-group w-25">
+    <label for="date">Date</label>
+    <input type="date"
+           class="form-control"
+           id="date"
+           name="date"
+           [(ngModel)]="course.date"
+    >
+  </div>
+
+  <div class="form-group w-25">
+    <label for="duration">Duration</label>
+    <input type="number"
+           class="form-control"
+           id="duration"
+           name="duration"
+           [(ngModel)]="course.duration"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="authors">Authors</label>
+    <input type="text"
+           class="form-control"
+           id="authors"
+           name="authors"
+           [(ngModel)]="course.authors"
+    >
+  </div>
+
+  <button type="submit" class="btn btn-primary mr-3">Save</button>
+  <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+
+</form>

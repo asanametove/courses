@@ -1,60 +1,7 @@
 <section class="container mb-3">
   <h2>Create course</h2>
-  <form (ngSubmit)="onSave()">
-
-    <div class="form-group">
-      <label for="title">Title</label>
-      <input type="text"
-             class="form-control"
-             id="title"
-             placeholder="Enter title"
-             name="title"
-             [(ngModel)]="title"
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea class="form-control"
-                id="description"
-                rows="3"
-                name="description"
-                [(ngModel)]="description"
-      ></textarea>
-    </div>
-
-    <div class="form-group w-25">
-      <label for="date">Date</label>
-      <input type="date"
-             class="form-control"
-             id="date"
-             name="date"
-             [(ngModel)]="date"
-      >
-    </div>
-
-    <div class="form-group w-25">
-      <label for="duration">Duration</label>
-      <input type="number"
-             class="form-control"
-             id="duration"
-             name="duration"
-             [(ngModel)]="duration"
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="authors">Authors</label>
-      <input type="text"
-             class="form-control"
-             id="authors"
-             name="authors"
-             [(ngModel)]="authors"
-      >
-    </div>
-
-    <button type="submit" class="btn btn-primary mr-3">Save</button>
-    <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
-
-  </form>
+  <courses-edit-course-form
+    (save)="onSave($event)"
+    (cancel)="onCancel()"
+  ></courses-edit-course-form>
 </section>
