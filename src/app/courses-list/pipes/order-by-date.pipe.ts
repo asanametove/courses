@@ -5,12 +5,12 @@ import { WithCreationDate } from '@shared/common.interfaces';
   name: 'orderByDate',
 })
 export class OrderByDatePipe implements PipeTransform {
-  private descCompareFn(a: WithCreationDate, b: WithCreationDate): number {
-    return b.creationDate.getTime() - a.creationDate.getTime();
+  private descCompareFn(itemA: WithCreationDate, itemB: WithCreationDate): number {
+    return itemB.creationDate.getTime() - itemA.creationDate.getTime();
   }
 
-  private ascCompareFn(a: WithCreationDate, b: WithCreationDate): number {
-    return a.creationDate.getTime() - b.creationDate.getTime();
+  private ascCompareFn(itemA: WithCreationDate, itemB: WithCreationDate): number {
+    return itemA.creationDate.getTime() - itemB.creationDate.getTime();
   }
 
   transform(list: WithCreationDate[], descending = false): WithCreationDate[] {

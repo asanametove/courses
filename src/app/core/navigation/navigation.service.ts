@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { RouteName } from '@shared/route-name';
 
 @Injectable()
 export class NavigationService {
@@ -7,21 +8,11 @@ export class NavigationService {
     private router: Router,
   ) {}
 
-  static pages = {
-    root: 'root',
-    login: 'login',
-  };
-
-  static routes = {
-    [NavigationService.pages.root]: '/',
-    [NavigationService.pages.login]: '/login',
-  };
-
-  isOnPage(page: string): boolean {
-    return NavigationService.routes[page] === this.router.url;
+  isOnPage(route: RouteName): boolean {
+    return this.router.url === route;
   }
 
-  navigateByUrl(page: string): void {
-    this.router.navigateByUrl(NavigationService.routes[page]);
+  navigateByUrl(route: RouteName): void {
+    this.router.navigateByUrl(route);
   }
 }

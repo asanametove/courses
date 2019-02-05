@@ -1,6 +1,7 @@
 import { LoginComponent } from './login.component';
 import { LoginService } from './login.service';
 import { NavigationService } from '../navigation/navigation.service';
+import { RouteName } from '@shared/route-name';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -32,9 +33,8 @@ describe('LoginComponent', () => {
     });
 
     it('should navigate to the root', () => {
-      const { root } = NavigationService.routes;
       component.logIn();
-      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(root);
+      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Root);
     });
   });
 });

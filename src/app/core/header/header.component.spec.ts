@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 import { LoginService } from '../login/login.service';
 import { NavigationService } from '../navigation/navigation.service';
+import { RouteName } from '@shared/route-name';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -72,7 +73,7 @@ describe('HeaderComponent', () => {
       // @ts-ignore
       const loginShown = component.loginShown;
 
-      expect(navigationServiceMock.isOnPage).toHaveBeenCalledWith(NavigationService.pages.login);
+      expect(navigationServiceMock.isOnPage).toHaveBeenCalledWith(RouteName.Login);
     });
   });
 });

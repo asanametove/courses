@@ -9,6 +9,8 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
 import { FormsModule } from '@angular/forms';
 import { NavigationService } from './navigation/navigation.service';
+import { CoursesService } from './courses/courses.service';
+import { UtilsModule } from '../utils/utils.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { NavigationService } from './navigation/navigation.service';
     CommonModule,
     RouterModule,
     FormsModule,
+    UtilsModule,
   ],
   exports: [
     HeaderComponent,
@@ -36,6 +39,7 @@ export class CoreModule {
       providers: [
         LoginService,
         NavigationService,
+        CoursesService,
       ],
     };
   }

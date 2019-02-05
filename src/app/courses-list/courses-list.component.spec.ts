@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { Pipe, PipeTransform } from '@angular/core';
 import { MockComponent } from 'ng-mocks';
 
+import { Course } from '@shared/course';
 import { CoursesListComponent } from './courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
 import { ToolboxComponent } from '../toolbox/toolbox.component';
-import { FilterPipe } from './filter.pipe';
-import { Pipe, PipeTransform } from '@angular/core';
-import { CoursesService } from './courses-list-item/courses.service';
-import { Course } from '@shared/course';
+import { FilterPipe } from './pipes/filter.pipe';
+import { CoursesService } from '../core/courses/courses.service';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;

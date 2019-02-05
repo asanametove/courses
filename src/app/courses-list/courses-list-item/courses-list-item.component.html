@@ -1,6 +1,8 @@
 <li class="card mb-3"
     [coursesDateHighlight]="course.creationDate"
-    [ngClass]="{'bg-primary': course.topRated}">
+    [ngClass]="{'bg-primary': course.topRated}"
+>
+
   <div class="card-header d-flex">
     <h5 class="mb-0 mr-2">{{course.title}}</h5>
     <fa-icon *ngIf="course.topRated" icon="star"></fa-icon>
@@ -9,6 +11,7 @@
       <span class="mx-2">{{course.creationDate | date}}</span>
     </div>
   </div>
+
   <div class="card-body d-flex">
     <p class="flex-grow-1">{{course.description}}</p>
     <div class="d-flex flex-column">
@@ -16,4 +19,5 @@
       <button class="btn btn-sm btn-danger m-1" (click)="onDelete()">Delete</button>
     </div>
   </div>
+
 </li>

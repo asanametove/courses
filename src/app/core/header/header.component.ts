@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouteName } from '@shared/route-name';
 import { LoginService } from '../login/login.service';
 import { NavigationService } from '../navigation/navigation.service';
 
@@ -17,8 +18,7 @@ export class HeaderComponent {
   }
 
   get loginShown() {
-    const { login } = NavigationService.pages;
-    return !this.loggedIn && !this.navigationService.isOnPage(login);
+    return !this.loggedIn && !this.navigationService.isOnPage(RouteName.Login);
   }
 
   logOut() {
