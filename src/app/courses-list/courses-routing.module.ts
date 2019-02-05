@@ -7,9 +7,23 @@ import { EditCourseComponent } from './edit-course/edit-course.component';
 import { LoginGuard } from '@core/login/login.guard';
 
 const routes: Routes = [
-  { path: RouteName.Courses, component: CoursesListComponent, canActivate: [ LoginGuard] },
-  { path: RouteName.NewCourse, component: CreateCourseComponent, canActivate: [ LoginGuard] },
-  { path: RouteName.EditCourse, component: EditCourseComponent, canActivate: [ LoginGuard] },
+  {
+    path: RouteName.Courses,
+    component: CoursesListComponent,
+    canActivate: [ LoginGuard],
+    data: { label: 'Courses' },
+  },
+  {
+    path: RouteName.NewCourse,
+    component: CreateCourseComponent,
+    canActivate: [ LoginGuard],
+    data: { label: 'New course' },
+  },
+  {
+    path: RouteName.EditCourse,
+    component: EditCourseComponent,
+    canActivate: [ LoginGuard],
+  },
 ];
 
 @NgModule({

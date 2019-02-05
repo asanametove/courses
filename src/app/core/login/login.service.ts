@@ -8,11 +8,19 @@ const localStorageKeysMap = {
 
 @Injectable()
 export class LoginService {
-  redirectUrl: string;
+  private _redirectUrl: string;
 
   constructor(
     private navigationService: NavigationService,
   ) {}
+
+  get redirectUrl(): string {
+    return this._redirectUrl;
+  }
+
+  set redirectUrl(value: string) {
+    this._redirectUrl = value;
+  }
 
   logIn(username: string, password: string): void {
     const userInfo = { username, password };

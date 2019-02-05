@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Course, CourseUpdateInfo } from '@shared/course';
+import { CourseNotFoundError } from '@shared/errors';
 
 @Injectable()
 export class CoursesService {
@@ -24,7 +25,7 @@ export class CoursesService {
   getCourseById(id: string): Course {
     const course = this.courses.find((item) => id === item.id);
     if (!course) {
-      throw new Error('Course not found');
+      throw new CourseNotFoundError();
     }
 
     return course;
