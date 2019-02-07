@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observer } from 'rxjs';
 import { Course } from '@shared/course';
 import { FilterPipe } from './pipes/filter.pipe';
 import { CoursesService } from '../core/courses/courses.service';
@@ -9,18 +10,29 @@ import { CoursesService } from '../core/courses/courses.service';
 })
 export class CoursesListComponent implements OnInit {
   query: string;
+  isLoadAvailable = false;
 
-  itemsCount = 3;
-
+  private chunkSize = 10;
+  private lastIndex = 0;
   private rawData: Course[] = [];
+  private courseSaver: Observer<Course[]> = {
+    next: chunk => {
+      this.rawData = [...this.rawData, ...chunk];
+      this.isLoadAvailable = chunk.length === this.chunkSize;
+    },
+    error: () => {},
+    complete: () => {},
+  };
 
   constructor(
     private coursesService: CoursesService,
     private filterPipe: FilterPipe<Course>,
   ) {}
 
-  private loadCourses(): void {
-    this.rawData = this.coursesService.getCourses();
+  loadCourses(): void {
+    this.coursesService.getCourses(this.lastIndex, this.chunkSize)
+      .subscribe(this.courseSaver);
+    this.lastIndex += this.chunkSize;
   }
 
   ngOnInit() {
@@ -28,16 +40,7 @@ export class CoursesListComponent implements OnInit {
   }
 
   get courses(): Course[] {
-    return this.filterPipe.transform(this.rawData, this.query, 'title')
-      .slice(0, this.itemsCount);
-  }
-
-  loadMore(): void {
-    this.itemsCount += 3;
-  }
-
-  isMoreAvailable(): boolean {
-    return this.rawData.length > this.itemsCount;
+    return this.filterPipe.transform(this.rawData, this.query, 'title');
   }
 
   onDelete(id: string): void {

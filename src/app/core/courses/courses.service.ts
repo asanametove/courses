@@ -1,18 +1,44 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
 import { CourseNotFoundError } from '@shared/errors';
+import { CourseRawData } from '@shared/common.interfaces';
 
 @Injectable()
 export class CoursesService {
-  private courses: Course[] = [
-    new Course('Title 1', 123, 'description1', new Date(2018, 11, 22)),
-    new Course('Title 2', 3, 'description2', undefined, undefined, true),
-    new Course('Title 3', 3, 'description3', new Date(2018, 11, 11)),
-    new Course('Title 4', 3, 'description4'),
-  ];
 
-  getCourses(): Course[] {
-    return this.courses;
+  // TODO Remove after all methods integration with real API
+  courses: Course[] = [];
+
+  constructor(
+    private http: HttpClient,
+  ) {}
+
+  // TODO Create MappingService
+  private toCourse({
+    name: title,
+    length: duration,
+    description,
+    date: creationDate,
+    id,
+    isTopRated: topRated,
+  }: CourseRawData): Course {
+    return new Course(
+      title,
+      duration,
+      description,
+      new Date(creationDate),
+      String(id),
+      topRated,
+    );
+  }
+
+  getCourses(start: number, count: number): Observable<Course[]> {
+    return this.http.get(`http://localhost:3004/courses?start=${start}&count=${count}`).pipe(
+      map((data: CourseRawData[]) => data.map(this.toCourse)),
+    );
   }
 
   createCourse(title: string, duration: number, description: string, date: Date): void {
