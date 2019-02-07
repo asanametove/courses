@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { NavigationService } from './navigation/navigation.service';
 import { CoursesService } from './courses/courses.service';
 import { UtilsModule } from '../utils/utils.module';
+import { LoginGuard } from './login/login.guard';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ export class CoreModule {
         LoginService,
         NavigationService,
         CoursesService,
+        LoginGuard,
       ],
     };
   }

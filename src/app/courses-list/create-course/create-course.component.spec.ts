@@ -1,14 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddCourseComponent } from './add-course.component';
+import { CreateCourseComponent } from './create-course.component';
 import { FormsModule } from '@angular/forms';
 import { RouteName } from '@shared/route-name';
-import { CoursesService } from '../core/courses/courses.service';
-import { NavigationService } from '../core/navigation/navigation.service';
+import { CoursesService } from '@core/courses/courses.service';
+import { NavigationService } from '@core/navigation/navigation.service';
+import { CourseUpdateInfo } from '@shared/course';
+import { MockComponent } from 'ng-mocks';
+import { EditCourseFormComponent } from '../edit-course-form/edit-course-form.component';
 
-describe('AddCourseComponent', () => {
-  let component: AddCourseComponent;
-  let fixture: ComponentFixture<AddCourseComponent>;
+describe('CreateCourseComponent', () => {
+  let component: CreateCourseComponent;
+  let fixture: ComponentFixture<CreateCourseComponent>;
 
   let coursesServiceMock: {
     createCourse: jasmine.Spy,
@@ -23,7 +26,10 @@ describe('AddCourseComponent', () => {
     navigationServiceMock = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
 
     TestBed.configureTestingModule({
-      declarations: [ AddCourseComponent ],
+      declarations: [
+        CreateCourseComponent,
+        MockComponent(EditCourseFormComponent),
+      ],
       imports: [ FormsModule ],
       providers: [
         { provide: CoursesService, useValue: coursesServiceMock },
@@ -34,7 +40,7 @@ describe('AddCourseComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddCourseComponent);
+    fixture = TestBed.createComponent(CreateCourseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -48,16 +54,15 @@ describe('AddCourseComponent', () => {
       const title = 'title';
       const description = 'description';
       const duration = 1;
-      const date = '1995-12-17';
-      Object.assign(component, { title, duration, description, date });
+      const date = new Date('1995-12-17');
 
-      component.onSave();
+      component.onSave({ title, duration, description, date });
 
-      expect(coursesServiceMock.createCourse).toHaveBeenCalledWith(title, duration, description, new Date(date));
+      expect(coursesServiceMock.createCourse).toHaveBeenCalledWith(title, duration, description, date);
     });
 
     it('should navigate to courses', () => {
-      component.onSave();
+      component.onSave({} as CourseUpdateInfo);
       expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Courses);
     });
   });

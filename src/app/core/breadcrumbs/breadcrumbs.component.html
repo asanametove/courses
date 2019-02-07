@@ -1,7 +1,8 @@
-<nav class="container" *ngIf="loggedIn">
+<nav class="container" *ngIf="isVisible">
   <ul class="breadcrumb">
-    <li class="breadcrumb-item" *ngFor="let crumb of crumbs">
-      <a href={{crumb.link}}>{{crumb.title}}</a>
+    <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs">
+      <a *ngIf="breadcrumb.isActive">{{breadcrumb.title}}</a>
+      <a *ngIf="!breadcrumb.isActive" routerLink="{{breadcrumb.link}}">{{breadcrumb.title}}</a>
     </li>
   </ul>
 </nav>

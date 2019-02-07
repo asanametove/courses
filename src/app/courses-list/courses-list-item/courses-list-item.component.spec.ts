@@ -2,12 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MockPipes } from 'ng-mocks/dist/lib/mock-pipe/mock-pipe';
-import { MockDirective, MockComponent } from 'ng-mocks';
+import { MockDirective, MockComponent, MockModule } from 'ng-mocks';
 
 import { Course } from '@shared/course';
 import { CoursesHighlightDirective } from '../directives/courses-highlight.directive';
 import { CoursesListItemComponent } from './courses-list-item.component';
 import { OrderByDatePipe } from '../pipes/order-by-date.pipe';
+import { RouterModule } from '@angular/router';
 
 describe('CoursesListItemComponent', () => {
   let hostComponent: TestHostComponent;
@@ -43,6 +44,9 @@ describe('CoursesListItemComponent', () => {
         MockComponent(FaIconComponent),
         MockPipes(OrderByDatePipe),
         DurationPipeMock,
+      ],
+      imports: [
+        MockModule(RouterModule),
       ],
     })
     .compileComponents();

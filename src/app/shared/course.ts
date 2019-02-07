@@ -18,8 +18,10 @@ export class Course implements Durable, Identifiable, WithCreationDate {
 }
 
 export interface CourseUpdateInfo {
-  title: string;
-  duration: number;
-  description: string;
-  topRated: boolean;
+  title?: string;
+  duration?: number;
+  description?: string;
+  topRated?: boolean;
+  date?: Date;
+  authors?: string;
 }

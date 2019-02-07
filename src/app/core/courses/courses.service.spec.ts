@@ -56,6 +56,7 @@ describe('CoursesService', () => {
         duration: 1000,
         description: 'new description',
         topRated: true,
+        date: new Date(fakeDate),
       };
 
       service.updateCourse(course.id, updateInfo);

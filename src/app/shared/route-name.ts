@@ -1,7 +1,8 @@
 export enum RouteName {
   Root = '',
-  Courses = 'courses',
   Login = 'login',
-  AddCourse = 'add-course',
+  Courses = 'courses',
+  NewCourse = 'courses/new',
+  EditCourse = 'courses/:id',
   NotDefined = '**',
 }

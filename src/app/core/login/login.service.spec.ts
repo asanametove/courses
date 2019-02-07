@@ -1,10 +1,14 @@
+import { NavigationService } from '@core/navigation/navigation.service';
 import { LoginService } from './login.service';
+import { RouteName } from '@shared/route-name';
 
 describe('LoginService', () => {
   let service: LoginService;
+  let navigationService: jasmine.SpyObj<NavigationService>;
 
   beforeEach(() => {
-    service = new LoginService();
+    navigationService = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
+    service = new LoginService(navigationService);
   });
 
   it('should be created', () => {
@@ -12,17 +16,29 @@ describe('LoginService', () => {
   });
 
   describe('#logIn', () => {
-    it('should place user info to the local storage', () => {
-      const username = 'username';
-      const password = 'password';
-      spyOn(localStorage, 'setItem');
+    const username = 'username';
+    const password = 'password';
 
+    it('should place user info to the local storage', () => {
+      spyOn(localStorage, 'setItem');
       service.logIn(username, password);
 
       expect(localStorage.setItem).toHaveBeenCalledWith(
         'userInfo',
         jasmine.any(String),
       );
+    });
+
+    it('should navigate to redirectUrl if it exists', () => {
+      const url = service.redirectUrl = 'url';
+      service.logIn(username, password);
+      expect(navigationService.navigateByUrl).toHaveBeenCalledWith(url);
+    });
+
+    it('should reset redirectUrl', () => {
+      service.redirectUrl = 'url';
+      service.logIn(username, password);
+      expect(service.redirectUrl).toBeNull();
     });
   });
 
@@ -31,6 +47,11 @@ describe('LoginService', () => {
       spyOn(localStorage, 'removeItem');
       service.logOut();
       expect(localStorage.removeItem).toHaveBeenCalledWith('userInfo');
+    });
+
+    it('should navigate to login page', () => {
+      service.logOut();
+      expect(navigationService.navigateByUrl).toHaveBeenCalledWith(RouteName.Login);
     });
   });
 

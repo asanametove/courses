@@ -1,0 +1,8 @@
+<section class="container mb-3">
+  <h2>Edit course</h2>
+  <courses-edit-course-form
+    [course]="course"
+    (save)="onSave($event)"
+    (cancel)="onCancel()"
+  ></courses-edit-course-form>
+</section>
