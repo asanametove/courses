@@ -10,8 +10,8 @@
   </ul>
 
   <button class="btn w-100"
-          (click)="loadMore()"
-          *ngIf="isMoreAvailable()"
+          (click)="loadCourses()"
+          *ngIf="isLoadAvailable"
   >Load more</button>
 
   <div class="alert alert-danger" *ngIf="!courses.length">

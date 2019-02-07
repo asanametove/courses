@@ -13,3 +13,19 @@ export interface Durable {
 export interface WithCreationDate {
   creationDate: Date;
 }
+
+export interface CourseRawData {
+  authors: Author[];
+  date: string;
+  description: string;
+  id: number;
+  isTopRated: boolean;
+  length: number;
+  name: string;
+}
+
+export interface Author {
+  firstName: string;
+  id: number;
+  lastName: string;
+}
