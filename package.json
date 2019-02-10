@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently \"cd json-server & node index\" \"ng serve --aot\"",
+    "start": "concurrently \"cd json-server & nodemon index\" \"ng serve --aot\"",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
@@ -46,6 +46,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng-mocks": "^7.2.0",
+    "nodemon": "^1.18.10",
     "protractor": "~5.4.0",
     "reset-css": "^4.0.1",
     "ts-node": "~7.0.0",

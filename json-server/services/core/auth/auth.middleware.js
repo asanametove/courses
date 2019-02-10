@@ -5,8 +5,8 @@ const url = require('url');
 module.exports = (server) => {
 
 	router.post('/auth/login', (req, res, next) => {
-		req.on('data', function (data) {
-			const body = JSON.parse(data.toString());
+		// req.on('data', function (data) {
+			const {body} = req; // JSON.parse(data.toString());
 		   
 		   
 			   console.log(body);
@@ -24,7 +24,7 @@ module.exports = (server) => {
 		   } else {
 			   res.status(401).send("Wrong password");
 		   }
-		});	
+		// });	
 	});
 		
 	router.post('/auth/userinfo', (req, res, next) => {
