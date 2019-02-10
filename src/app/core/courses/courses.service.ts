@@ -52,11 +52,13 @@ export class CoursesService {
     );
   }
 
-  createCourse(title: string, duration: number, description: string, date: Date): void {
-    this.courses = [
-      ...this.courses,
-      new Course(title, duration, description, date),
-    ];
+  createCourse(title: string, duration: number, description: string, date: Date): Observable<any> {
+    return this.http.post('http://localhost:3004/courses', {
+      name: title,
+      length: duration,
+      description,
+      date,
+    });
   }
 
   getCourseById(id: string): Course {
@@ -73,8 +75,7 @@ export class CoursesService {
     course.update(payload);
   }
 
-  removeCourse(id: string): void {
-    const currentCourse = this.getCourseById(id);
-    this.courses = this.courses.filter((course) => course.id !== currentCourse.id);
+  removeCourse(id: string): Observable<any> {
+    return this.http.delete(`http://localhost:3004/courses/${id}`);
   }
 }

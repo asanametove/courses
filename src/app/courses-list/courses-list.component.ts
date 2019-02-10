@@ -39,9 +39,15 @@ export class CoursesListComponent implements OnInit {
       : config;
   }
 
-  loadCourses(): void {
+  loadCourses(anew?: boolean): void {
+    if (anew) {
+      this.courses = [];
+      this.lastIndex = 0;
+    }
+
     this.coursesService.getCourses(this.coursesLoadParams)
       .subscribe(this.courseSaver);
+
     this.lastIndex += this.chunkSize;
   }
 
@@ -51,15 +57,13 @@ export class CoursesListComponent implements OnInit {
 
   onDelete(id: string): void {
     if (confirm('Do you really want to delete this course?')) {
-      this.coursesService.removeCourse(id);
-      this.loadCourses();
+      this.coursesService.removeCourse(id)
+        .subscribe(() => this.loadCourses(true));
     }
   }
 
   onSearch(query: string): void {
-    this.courses = [];
-    this.lastIndex = 0;
     this.query = query;
-    this.loadCourses();
+    this.loadCourses(true);
   }
 }
