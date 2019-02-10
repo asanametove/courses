@@ -6,10 +6,12 @@
      *ngIf="loginShown"
   >Log in</a>
 
-  <button type="button"
-        class="btn btn-primary ml-2"
-        *ngIf="loggedIn"
-        (click)="logOut()"
-  >Log out</button>
+  <div *ngIf="loggedIn">
+    <span>{{ user?.first }} {{ user?.last }}</span>
+    <button type="button"
+          class="btn btn-primary ml-2"
+          (click)="logOut()"
+    >Log out</button>
+  </div>
 
 </header>
