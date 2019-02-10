@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CoursesListModule } from './courses-list/courses-list.module';
 import { CoreModule } from './core/core.module';
 import { FormsModule } from '@angular/forms';
+import { httpInterceptorProviders } from '@core/interceptors';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

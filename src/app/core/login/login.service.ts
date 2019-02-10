@@ -19,16 +19,9 @@ export class LoginService {
     this.updateUserInfo();
   }
 
-  private get headers(): HttpHeaders {
-    return new HttpHeaders(this.isLoggedIn()
-      ? { Authorization: localStorage.getItem(LocalStorageKey.Token) }
-      : {},
-    );
-  }
-
   private updateUserInfo(): void {
     if (this.isLoggedIn()) {
-      this.http.post('http://localhost:3004/auth/userinfo', null, { headers: this.headers })
+      this.http.post('http://localhost:3004/auth/userinfo', null)
         .subscribe((user: any) => this.userInfo$.next(user.name));
     }
   }
