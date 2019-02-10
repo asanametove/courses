@@ -24,6 +24,12 @@ export interface CourseRawData {
   name: string;
 }
 
+export interface CourseLoadConfig {
+  start: number;
+  count: number;
+  textFragment?: string;
+}
+
 export interface Author {
   firstName: string;
   id: number;

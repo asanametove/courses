@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
 import { CourseNotFoundError } from '@shared/errors';
-import { CourseRawData } from '@shared/common.interfaces';
+import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
 
 @Injectable()
 export class CoursesService {
@@ -35,8 +35,19 @@ export class CoursesService {
     );
   }
 
-  getCourses(start: number, count: number): Observable<Course[]> {
-    return this.http.get(`http://localhost:3004/courses?start=${start}&count=${count}`).pipe(
+  // TODO Move it to separate service
+  private buildUrl(base: string, paramsMap: Object): string {
+    const paramsString = Object.entries(paramsMap)
+      .map((pair) => pair.join('='))
+      .join('&');
+
+    return [base, paramsString]
+      .filter(Boolean)
+      .join('?');
+  }
+
+  getCourses(config: CourseLoadConfig): Observable<Course[]> {
+    return this.http.get(this.buildUrl('http://localhost:3004/courses', config)).pipe(
       map((data: CourseRawData[]) => data.map(this.toCourse)),
     );
   }

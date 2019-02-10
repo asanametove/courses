@@ -1,46 +1,52 @@
 import { Component, OnInit } from '@angular/core';
 import { Observer } from 'rxjs';
 import { Course } from '@shared/course';
-import { FilterPipe } from './pipes/filter.pipe';
 import { CoursesService } from '../core/courses/courses.service';
+import { CourseLoadConfig } from '@shared/common.interfaces';
 
 @Component({
   selector: 'courses-list',
   templateUrl: './courses-list.component.html',
 })
 export class CoursesListComponent implements OnInit {
-  query: string;
   isLoadAvailable = false;
+  courses: Course[] = [];
 
-  private chunkSize = 10;
+  private query: string;
+  private chunkSize = 5;
   private lastIndex = 0;
-  private rawData: Course[] = [];
   private courseSaver: Observer<Course[]> = {
     next: chunk => {
-      this.rawData = [...this.rawData, ...chunk];
+      this.courses = [...this.courses, ...chunk];
       this.isLoadAvailable = chunk.length === this.chunkSize;
     },
-    error: () => {},
+    error: (error) => { throw error; },
     complete: () => {},
   };
 
   constructor(
     private coursesService: CoursesService,
-    private filterPipe: FilterPipe<Course>,
   ) {}
 
+  private get coursesLoadParams(): CourseLoadConfig {
+    const config: CourseLoadConfig = {
+      start: this.lastIndex,
+      count: this.chunkSize,
+    };
+
+    return this.query
+      ? { ...config, textFragment: this.query }
+      : config;
+  }
+
   loadCourses(): void {
-    this.coursesService.getCourses(this.lastIndex, this.chunkSize)
+    this.coursesService.getCourses(this.coursesLoadParams)
       .subscribe(this.courseSaver);
     this.lastIndex += this.chunkSize;
   }
 
   ngOnInit() {
     this.loadCourses();
-  }
-
-  get courses(): Course[] {
-    return this.filterPipe.transform(this.rawData, this.query, 'title');
   }
 
   onDelete(id: string): void {
@@ -51,6 +57,9 @@ export class CoursesListComponent implements OnInit {
   }
 
   onSearch(query: string): void {
+    this.courses = [];
+    this.lastIndex = 0;
     this.query = query;
+    this.loadCourses();
   }
 }
