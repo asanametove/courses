@@ -17,9 +17,10 @@ export class CreateCourseComponent {
   ) {}
 
   onSave({ title, duration, description, date }: CourseUpdateInfo) {
-    this.coursesService.createCourse(title, duration, description, new Date(date));
-
-    this.navigationService.navigateByUrl(RouteName.Courses);
+    this.coursesService.createCourse(title, duration, description, new Date(date))
+      .subscribe(() => {
+        this.navigationService.navigateByUrl(RouteName.Courses);
+      });
   }
 
   onCancel() {
