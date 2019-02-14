@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { LocalStorageKey } from '@shared/local-storage-keys';
 import { Subject } from 'rxjs';
 import { User } from '@shared/user';
+import * as api from '@shared/api';
 
 @Injectable()
 export class LoginService {
@@ -21,7 +22,7 @@ export class LoginService {
 
   private updateUserInfo(): void {
     if (this.isLoggedIn()) {
-      this.http.post('http://localhost:3004/auth/userinfo', null)
+      this.http.post(api.userInfo, null)
         .subscribe((user: any) => this.userInfo$.next(user.name));
     }
   }
@@ -35,7 +36,7 @@ export class LoginService {
   }
 
   logIn(login: string, password: string): void {
-    this.http.post('http://localhost:3004/auth/login', { login, password })
+    this.http.post(api.login, { login, password })
       .subscribe(({ token }: any) => {
         localStorage.setItem(LocalStorageKey.Token, token);
         this.updateUserInfo();

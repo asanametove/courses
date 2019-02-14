@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
 import { CourseNotFoundError } from '@shared/errors';
 import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
+import * as api from '@shared/api';
 
 @Injectable()
 export class CoursesService {
@@ -47,13 +48,13 @@ export class CoursesService {
   }
 
   getCourses(config: CourseLoadConfig): Observable<Course[]> {
-    return this.http.get(this.buildUrl('http://localhost:3004/courses', config)).pipe(
+    return this.http.get(this.buildUrl(api.courses, config)).pipe(
       map((data: CourseRawData[]) => data.map(this.toCourse)),
     );
   }
 
   createCourse(title: string, duration: number, description: string, date: Date): Observable<any> {
-    return this.http.post('http://localhost:3004/courses', {
+    return this.http.post(api.courses, {
       name: title,
       length: duration,
       description,
@@ -76,6 +77,6 @@ export class CoursesService {
   }
 
   removeCourse(id: string): Observable<any> {
-    return this.http.delete(`http://localhost:3004/courses/${id}`);
+    return this.http.delete(`${api.courses}/${id}`);
   }
 }

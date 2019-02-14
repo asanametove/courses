@@ -39,12 +39,12 @@ export class CoursesListComponent implements OnInit {
       : config;
   }
 
-  loadCourses(anew?: boolean): void {
-    if (anew) {
-      this.courses = [];
-      this.lastIndex = 0;
-    }
+  private resetCourses(): void {
+    this.courses = [];
+    this.lastIndex = 0;
+  }
 
+  loadCourses(): void {
     this.coursesService.getCourses(this.coursesLoadParams)
       .subscribe(this.courseSaver);
 
@@ -58,12 +58,16 @@ export class CoursesListComponent implements OnInit {
   onDelete(id: string): void {
     if (confirm('Do you really want to delete this course?')) {
       this.coursesService.removeCourse(id)
-        .subscribe(() => this.loadCourses(true));
+        .subscribe(() => {
+          this.resetCourses();
+          this.loadCourses();
+        });
     }
   }
 
   onSearch(query: string): void {
     this.query = query;
-    this.loadCourses(true);
+    this.resetCourses();
+    this.loadCourses();
   }
 }
