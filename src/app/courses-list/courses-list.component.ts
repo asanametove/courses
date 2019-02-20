@@ -1,53 +1,73 @@
 import { Component, OnInit } from '@angular/core';
+import { Observer } from 'rxjs';
 import { Course } from '@shared/course';
-import { FilterPipe } from './pipes/filter.pipe';
 import { CoursesService } from '../core/courses/courses.service';
+import { CourseLoadConfig } from '@shared/common.interfaces';
 
 @Component({
   selector: 'courses-list',
   templateUrl: './courses-list.component.html',
 })
 export class CoursesListComponent implements OnInit {
-  query: string;
+  isLoadAvailable = false;
+  courses: Course[] = [];
 
-  itemsCount = 3;
-
-  private rawData: Course[] = [];
+  private query: string;
+  private chunkSize = 5;
+  private lastIndex = 0;
+  private courseSaver: Observer<Course[]> = {
+    next: chunk => {
+      this.courses = [...this.courses, ...chunk];
+      this.isLoadAvailable = chunk.length === this.chunkSize;
+    },
+    error: (error) => { throw error; },
+    complete: () => {},
+  };
 
   constructor(
     private coursesService: CoursesService,
-    private filterPipe: FilterPipe<Course>,
   ) {}
 
-  private loadCourses(): void {
-    this.rawData = this.coursesService.getCourses();
+  private get coursesLoadParams(): CourseLoadConfig {
+    const config: CourseLoadConfig = {
+      start: this.lastIndex,
+      count: this.chunkSize,
+    };
+
+    return this.query
+      ? { ...config, textFragment: this.query }
+      : config;
+  }
+
+  private resetCourses(): void {
+    this.courses = [];
+    this.lastIndex = 0;
+  }
+
+  loadCourses(): void {
+    this.coursesService.getCourses(this.coursesLoadParams)
+      .subscribe(this.courseSaver);
+
+    this.lastIndex += this.chunkSize;
   }
 
   ngOnInit() {
     this.loadCourses();
   }
 
-  get courses(): Course[] {
-    return this.filterPipe.transform(this.rawData, this.query, 'title')
-      .slice(0, this.itemsCount);
-  }
-
-  loadMore(): void {
-    this.itemsCount += 3;
-  }
-
-  isMoreAvailable(): boolean {
-    return this.rawData.length > this.itemsCount;
-  }
-
   onDelete(id: string): void {
     if (confirm('Do you really want to delete this course?')) {
-      this.coursesService.removeCourse(id);
-      this.loadCourses();
+      this.coursesService.removeCourse(id)
+        .subscribe(() => {
+          this.resetCourses();
+          this.loadCourses();
+        });
     }
   }
 
   onSearch(query: string): void {
     this.query = query;
+    this.resetCourses();
+    this.loadCourses();
   }
 }

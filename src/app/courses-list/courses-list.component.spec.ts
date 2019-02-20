@@ -78,18 +78,18 @@ describe('CoursesListComponent', () => {
     });
   });
 
-  describe('#loadMore', () => {
-    const getLoadMoreButton = () => fixture.debugElement.query(By.css('button'));
+  describe('#loadCourses', () => {
+    const getLoadCoursesButton = () => fixture.debugElement.query(By.css('button'));
     const getCoursesList = () => fixture.nativeElement.querySelectorAll('courses-list-item');
 
     it('should show button if more courses available', () => {
-      expect(getLoadMoreButton()).toBeTruthy();
+      expect(getLoadCoursesButton()).toBeTruthy();
     });
 
     it('should load more courses if they are available', () => {
       const oldList = getCoursesList();
 
-      getLoadMoreButton().triggerEventHandler('click', null);
+      getLoadCoursesButton().triggerEventHandler('click', null);
       fixture.detectChanges();
       const newList = getCoursesList();
 
@@ -97,10 +97,10 @@ describe('CoursesListComponent', () => {
     });
 
     it('should hide button if more courses does not available', () => {
-      getLoadMoreButton().triggerEventHandler('click', null);
+      getLoadCoursesButton().triggerEventHandler('click', null);
       fixture.detectChanges();
 
-      expect(getLoadMoreButton()).toBeFalsy();
+      expect(getLoadCoursesButton()).toBeFalsy();
     });
   });
 

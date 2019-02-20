@@ -9,7 +9,7 @@ export class NavigationService {
   ) {}
 
   isOnPage(route: RouteName): boolean {
-    return this.router.url === route;
+    return this.router.url === `/${route}`;
   }
 
   navigateByUrl(route: RouteName): void {

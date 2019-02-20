@@ -1,11 +1,6 @@
-import { Identifiable } from './common.interfaces';
-
-export class User implements Identifiable {
-    private static id = 0;
-
+export class User {
     constructor(
-        public firstName: string,
-        public lastName: string,
-        public id = String(++User.id),
+        public first: string,
+        public last: string,
     ) {}
 }

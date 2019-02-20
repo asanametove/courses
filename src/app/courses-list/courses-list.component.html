@@ -3,15 +3,15 @@
   <courses-toolbox (search)="onSearch($event)"></courses-toolbox>
 
   <ul>
-    <courses-list-item *ngFor="let course of courses | orderByDate"
+    <courses-list-item *ngFor="let course of courses"
                        [course]="course"
                        (deleteCourse)="onDelete($event)"
     ></courses-list-item>
   </ul>
 
   <button class="btn w-100"
-          (click)="loadMore()"
-          *ngIf="isMoreAvailable()"
+          (click)="loadCourses()"
+          *ngIf="isLoadAvailable"
   >Load more</button>
 
   <div class="alert alert-danger" *ngIf="!courses.length">
