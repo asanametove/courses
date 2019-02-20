@@ -1,82 +1,91 @@
+import { of } from 'rxjs';
 import { CoursesService } from './courses.service';
-import { CourseUpdateInfo, Course } from '@shared/course';
+import { Course } from '@shared/course';
+import * as api from '@shared/api';
 
 describe('CoursesService', () => {
   let service: CoursesService;
-  let course: Course;
+  let http: {
+    get: jasmine.Spy,
+    post: jasmine.Spy,
+    delete: jasmine.Spy,
+  };
+  let courses: Course[];
 
   const fakeDate = '2000-01-01';
+  const start = 1;
+  const count = 2;
+  const textFragment = 'textFragment';
 
   beforeEach(() => {
-    service = new CoursesService();
-    [, course] = service.getCourses();
+    http = jasmine.createSpyObj('Http', ['get', 'post', 'delete']);
+    http.get.and.returnValue(of(courses = [
+      new Course('', 1, 'des1'),
+      new Course('course2', 2, 'des2'),
+    ]));
+
+    service = new CoursesService(http as any);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // TODO test courses mapping
   describe('#getCourses', () => {
-    it('should return courses list', () => {
-      expect(service.getCourses()).toBeTruthy();
+    it('should make API call', (done) => {
+      service.getCourses({start, count, textFragment}).subscribe(() => {
+        expect(http.get).toHaveBeenCalledWith(
+          `${api.courses}?start=${start}&count=${count}&textFragment=${textFragment}`,
+        );
+        done();
+      });
+    });
+
+    it('should return courses list', (done) => {
+      service.getCourses({start, count}).subscribe((data) => {
+        expect(data.length).toBe(courses.length);
+        done();
+      });
     });
   });
 
   describe('#createCourse', () => {
-    it('should add new course to the courses list', () => {
-      const title = 'New title';
-      service.createCourse(title, 1, 'description', new Date(fakeDate));
+    it('should make POST request to courses API', () => {
+      const name = 'name';
+      const length = 1;
+      const description = 'description';
+      const date = new Date(fakeDate);
+      service.createCourse(name, length, description, date);
 
-      const newCourse = service.getCourses().pop();
-      expect(newCourse.title).toBe(title);
-    });
-
-    it('should change courses list reference', () => {
-      const oldRef = service.getCourses();
-      service.createCourse('title', 1, 'description', new Date(fakeDate));
-
-      expect(service.getCourses()).not.toBe(oldRef);
+      expect(http.post).toHaveBeenCalledWith(
+        api.courses,
+        {name, length, description, date},
+      );
     });
   });
 
+  // TODO test after integration with real API
   describe('#getCourseById', () => {
     it('should find course by ID', () => {
-      expect(service.getCourseById(course.id)).toBe(course);
     });
 
     it('should throw an error if can not find course by ID', () => {
-      expect(() => service.getCourseById('notExistingId')).toThrow(new Error('Course not found'));
     });
   });
 
+  // TODO test after integration with real API
   describe('#updateCourse', () => {
     it('should update course', () => {
-      const updateInfo: CourseUpdateInfo = {
-        title: 'new title',
-        duration: 1000,
-        description: 'new description',
-        topRated: true,
-        date: new Date(fakeDate),
-      };
-
-      service.updateCourse(course.id, updateInfo);
-
-      expect(course).toEqual(jasmine.objectContaining(updateInfo));
     });
   });
 
   describe('#removeCourse', () => {
-    it('should remove course with provided id', () => {
-      service.removeCourse(course.id);
+    it('should make DELETE request to courses API', () => {
+      const id = 'id';
+      service.removeCourse(id);
 
-      expect(service.getCourses()).not.toContain(course);
-    });
-
-    it('should change courses list reference', () => {
-      const oldRef = service.getCourses();
-      service.removeCourse(course.id);
-
-      expect(service.getCourses()).not.toBe(oldRef);
+      expect(http.delete).toHaveBeenCalledWith(`${api.courses}/${id}`);
     });
   });
 });

@@ -9,7 +9,7 @@ export class ToolboxComponent {
 
   query = '';
 
-  onSubmit(): void {
+  onQueryChange(): void {
     this.search.emit(this.query.toLowerCase());
   }
 }

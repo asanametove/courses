@@ -7,7 +7,7 @@ describe('NavigationService', () => {
 
   beforeEach(() => {
     routerMock = {
-      url: RouteName.Login,
+      url: `/${RouteName.Login}`,
       navigateByUrl: jasmine.createSpy('Router#navigateByUrl'),
     };
 

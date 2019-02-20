@@ -1,14 +1,21 @@
+import { of } from 'rxjs';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { LoginService } from './login.service';
 import { RouteName } from '@shared/route-name';
+import { login } from '@shared/api';
+import { LocalStorageKey } from '@shared/local-storage-keys';
 
 describe('LoginService', () => {
   let service: LoginService;
   let navigationService: jasmine.SpyObj<NavigationService>;
+  let http: {
+    post: jasmine.Spy,
+  };
 
   beforeEach(() => {
     navigationService = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
-    service = new LoginService(navigationService);
+    http = jasmine.createSpyObj('Http', ['post']);
+    service = new LoginService(navigationService, http as any);
   });
 
   it('should be created', () => {
@@ -18,15 +25,33 @@ describe('LoginService', () => {
   describe('#logIn', () => {
     const username = 'username';
     const password = 'password';
+    const token = 'token';
+
+    beforeEach(() => {
+      spyOn(localStorage, 'setItem');
+      http.post.and.returnValue(of({ token }));
+    });
+
+    it('should make login call', () => {
+      service.logIn(username, password);
+
+      expect(http.post).toHaveBeenCalledWith(
+        login,
+        {login: username, password},
+      );
+    });
 
     it('should place user info to the local storage', () => {
-      spyOn(localStorage, 'setItem');
       service.logIn(username, password);
 
       expect(localStorage.setItem).toHaveBeenCalledWith(
-        'userInfo',
-        jasmine.any(String),
+        LocalStorageKey.Token,
+        token,
       );
+    });
+
+    // TODO cover user info updating
+    it('should update user info', () => {
     });
 
     it('should navigate to redirectUrl if it exists', () => {
@@ -46,7 +71,7 @@ describe('LoginService', () => {
     it('should remove user info from local storage', () => {
       spyOn(localStorage, 'removeItem');
       service.logOut();
-      expect(localStorage.removeItem).toHaveBeenCalledWith('userInfo');
+      expect(localStorage.removeItem).toHaveBeenCalledWith(LocalStorageKey.Token);
     });
 
     it('should navigate to login page', () => {
@@ -64,13 +89,6 @@ describe('LoginService', () => {
     it('should be false if there is no user info in local storage', () => {
       spyOn(localStorage, 'getItem').and.returnValue(null);
       expect(service.isLoggedIn()).toBe(false);
-    });
-  });
-
-  describe('#getUserInfo', () => {
-    it('should return parsed user info', () => {
-      spyOn(localStorage, 'getItem').and.returnValue('{"username": "username"}');
-      expect(service.getUserInfo()).toEqual({ username: 'username' });
     });
   });
 });
