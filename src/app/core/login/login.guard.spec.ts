@@ -3,23 +3,27 @@ import { LoginService } from './login.service';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { RouteName } from '@shared/route-name';
+import { of, Observable } from 'rxjs';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;
-  let loginService: jasmine.SpyObj<LoginService>;
+  let loginService: {
+    isLoggedIn$: Observable<boolean>,
+    redirectUrl: string,
+  };
   let navigationService: jasmine.SpyObj<NavigationService>;
 
   beforeEach(() => {
     loginService = jasmine.createSpyObj('LoginService', ['isLoggedIn']);
     navigationService = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
 
-    guard = new LoginGuard(loginService, navigationService);
+    guard = new LoginGuard(loginService as any, navigationService);
   });
 
   describe('#canActivate', () => {
     describe('for logged in user', () => {
       it('should be truthy', () => {
-        loginService.isLoggedIn.and.returnValue(true);
+        loginService.isLoggedIn$ = of(true);
         expect(guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot))
           .toBeTruthy();
       });
@@ -27,7 +31,7 @@ describe('LoginGuard', () => {
 
     describe('for not logged in user', () => {
       beforeEach(() => {
-        loginService.isLoggedIn.and.returnValue(false);
+        loginService.isLoggedIn$ = of(false);
       });
 
       it('should be falsy', () => {

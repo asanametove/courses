@@ -3,15 +3,19 @@ import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageKey } from '@shared/local-storage-keys';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@shared/user';
 import * as api from '@shared/api';
 
 @Injectable()
 export class LoginService {
   private _redirectUrl: string;
+  private _userInfo$ = new BehaviorSubject<User>(null);
 
-  public userInfo$ = new Subject<User>();
+  public userInfo$ = this._userInfo$.asObservable();
+  public isLoggedIn$ = new Observable<boolean>((observer) => {
+    observer.next(!!this.token);
+  });
 
   constructor(
     private navigationService: NavigationService,
@@ -21,10 +25,16 @@ export class LoginService {
   }
 
   private updateUserInfo(): void {
-    if (this.isLoggedIn()) {
+    if (this.token) {
       this.http.post(api.userInfo, null)
-        .subscribe((user: any) => this.userInfo$.next(user.name));
+        .subscribe((user: any) => this._userInfo$.next(user.name));
+    } else {
+      this._userInfo$.next(null);
     }
+  }
+
+  private get token(): string {
+    return localStorage.getItem(LocalStorageKey.Token);
   }
 
   get redirectUrl(): string {
@@ -50,10 +60,7 @@ export class LoginService {
   logOut(): void {
     localStorage.removeItem(LocalStorageKey.Token);
     console.log('Logged out');
+    this.updateUserInfo();
     this.navigationService.navigateByUrl(RouteName.Login);
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem(LocalStorageKey.Token);
   }
 }

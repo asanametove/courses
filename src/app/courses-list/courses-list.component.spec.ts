@@ -11,7 +11,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { CoursesService } from '../core/courses/courses.service';
 import { of } from 'rxjs';
 
-fdescribe('CoursesListComponent', () => {
+describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
   let fixture: ComponentFixture<CoursesListComponent>;
   let coursesService: jasmine.SpyObj<CoursesService>;

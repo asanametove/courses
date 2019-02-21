@@ -3,10 +3,10 @@
 
   <a routerLink="/login"
      class="btn btn-primary"
-     *ngIf="loginShown"
+     *ngIf="loginShown | async"
   >Log in</a>
 
-  <div *ngIf="loggedIn">
+  <div *ngIf="loggedIn | async">
     <span>{{ user?.first }} {{ user?.last }}</span>
     <button type="button"
           class="btn btn-primary ml-2"

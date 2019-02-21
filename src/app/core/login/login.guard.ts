@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { LoginService } from './login.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
+import { LoginService } from './login.service';
 
 @Injectable()
 export class LoginGuard implements CanActivate {
@@ -11,13 +13,14 @@ export class LoginGuard implements CanActivate {
     private navigationService: NavigationService,
   ) {}
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.loginService.isLoggedIn()) {
-      return true;
-    }
-
-    this.loginService.redirectUrl = state.url;
-    this.navigationService.navigateByUrl(RouteName.Login);
-    return false;
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.loginService.isLoggedIn$.pipe(
+      tap((isLoggedIn) => {
+        if (!isLoggedIn) {
+          this.loginService.redirectUrl = state.url;
+          this.navigationService.navigateByUrl(RouteName.Login);
+        }
+      }),
+    );
   }
 }

@@ -83,12 +83,12 @@ describe('LoginService', () => {
   describe('#isLoggedIn', () => {
     it('should be true if there is user info in local storage', () => {
       spyOn(localStorage, 'getItem').and.returnValue('info');
-      expect(service.isLoggedIn()).toBe(true);
+      expect(service.isLoggedIn$).toBe(true);
     });
 
     it('should be false if there is no user info in local storage', () => {
       spyOn(localStorage, 'getItem').and.returnValue(null);
-      expect(service.isLoggedIn()).toBe(false);
+      expect(service.isLoggedIn$).toBe(false);
     });
   });
 });
