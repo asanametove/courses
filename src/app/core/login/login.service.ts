@@ -6,6 +6,7 @@ import { LocalStorageKey } from '@shared/local-storage-keys';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@shared/user';
 import * as api from '@shared/api';
+import { LoadingService } from '@core/loading/loading.service';
 
 @Injectable()
 export class LoginService {
@@ -20,6 +21,7 @@ export class LoginService {
   constructor(
     private navigationService: NavigationService,
     private http: HttpClient,
+    private loadingService: LoadingService,
   ) {
     this.updateUserInfo();
   }
@@ -37,6 +39,16 @@ export class LoginService {
     return localStorage.getItem(LocalStorageKey.Token);
   }
 
+  private handleLoginResult = ({ token }: any) => {
+    this.loadingService.hide();
+    localStorage.setItem(LocalStorageKey.Token, token);
+    this.updateUserInfo();
+    if (this.redirectUrl) {
+      this.navigationService.navigateByUrl(this.redirectUrl as RouteName);
+      this.redirectUrl = null;
+    }
+  }
+
   get redirectUrl(): string {
     return this._redirectUrl;
   }
@@ -46,15 +58,12 @@ export class LoginService {
   }
 
   logIn(login: string, password: string): void {
+    this.loadingService.show();
     this.http.post(api.login, { login, password })
-      .subscribe(({ token }: any) => {
-        localStorage.setItem(LocalStorageKey.Token, token);
-        this.updateUserInfo();
-        if (this.redirectUrl) {
-          this.navigationService.navigateByUrl(this.redirectUrl as RouteName);
-          this.redirectUrl = null;
-        }
-      });
+      .subscribe(
+        this.handleLoginResult,
+        () => this.loadingService.hide(),
+      );
   }
 
   logOut(): void {
