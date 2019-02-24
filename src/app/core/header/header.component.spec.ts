@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Subject, of, Observable } from 'rxjs';
+import { Subject, of, Observable, BehaviorSubject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { LoginService } from '../login/login.service';
 import { NavigationService } from '../navigation/navigation.service';
@@ -10,13 +10,21 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let navigationService: jasmine.SpyObj<NavigationService>;
-  const loginService: {
+  let loginService: {
     isLoggedIn$: Observable<boolean>,
-  } = {} as any;
+    userInfo$: Observable<User>,
+  };
+  let isLoggedIn$: BehaviorSubject<boolean>;
+
+  const firstName = 'firstName';
+  const lastName = 'lastName';
 
   beforeEach(async(() => {
     navigationService = jasmine.createSpyObj('navigationService', ['isOnPage']);
-    loginService.isLoggedIn$ = of(false);
+    loginService = {
+      isLoggedIn$: isLoggedIn$ = new BehaviorSubject(false),
+      userInfo$: of(new User(firstName, lastName)),
+    };
 
     TestBed.configureTestingModule({
       declarations: [
@@ -42,40 +50,46 @@ describe('HeaderComponent', () => {
   });
 
   describe('#loggedIn', () => {
-    it('should return observable login status', () => {
-      const loggedIn = {};
-      loginService.isLoggedIn$ = {} as any;
-
-      expect(component.loggedIn).toBe(loggedIn);
+    it('should return observable login status', (done) => {
+      component.isLoggedIn$.subscribe((isLoggedIn) => {
+        expect(isLoggedIn).toBe(false);
+        done();
+      });
     });
   });
 
-  describe('#loginShown', () => {
-    it('should be truthy if user not logged in and page is different from Login', () => {
-      loginService.isLoggedIn$ = of(false);
+  describe('#isLoginShown$', () => {
+    it('should be truthy if user not logged in and page is different from Login', (done) => {
       navigationService.isOnPage.and.returnValue(false);
 
-      expect(component.loginShown).toBeTruthy();
+      component.isLoginShown$.subscribe((isLoginShown) => {
+        expect(isLoginShown).toBe(true);
+        done();
+      });
     });
 
-    it('should be falsy if user logged in', () => {
-      loginService.isLoggedIn$ = of(true);
-      expect(component.loginShown).toBeFalsy();
+    it('should be falsy if user logged in', (done) => {
+      isLoggedIn$.next(true);
+      component.isLoginShown$.subscribe((isLoginShown) => {
+        expect(isLoginShown).toBe(false);
+        done();
+      });
     });
 
-    it('should be falsy if user is on Login page', () => {
-      loginService.isLoggedIn$ = of(false);
+    it('should be falsy if user is on Login page', (done) => {
       navigationService.isOnPage.and.returnValue(true);
 
-      expect(component.loginShown).toBeFalsy();
+      component.isLoginShown$.subscribe((isLoginShown) => {
+        expect(isLoginShown).toBe(false);
+        done();
+      });
     });
 
-    it('should check current page if user is not logged in', () => {
-      loginService.isLoggedIn$ = of(false);
-      // @ts-ignore
-      const loginShown = component.loginShown;
-
-      expect(navigationService.isOnPage).toHaveBeenCalledWith(RouteName.Login);
+    it('should check current page if user is not logged in', (done) => {
+      component.isLoginShown$.subscribe(() => {
+        expect(navigationService.isOnPage).toHaveBeenCalledWith(RouteName.Login);
+        done();
+      });
     });
   });
 });

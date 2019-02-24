@@ -1,20 +1,21 @@
-import { LoginGuard } from './login.guard';
-import { LoginService } from './login.service';
-import { NavigationService } from '@core/navigation/navigation.service';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { of, Observable, BehaviorSubject } from 'rxjs';
+import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
-import { of, Observable } from 'rxjs';
+import { LoginGuard } from './login.guard';
+import { doesNotThrow } from 'assert';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;
   let loginService: {
     isLoggedIn$: Observable<boolean>,
-    redirectUrl: string,
+    redirectUrl?: string,
   };
+  let isLoggedIn$: BehaviorSubject<boolean>;
   let navigationService: jasmine.SpyObj<NavigationService>;
 
   beforeEach(() => {
-    loginService = jasmine.createSpyObj('LoginService', ['isLoggedIn']);
+    loginService = { isLoggedIn$: isLoggedIn$ = new BehaviorSubject(false) };
     navigationService = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
 
     guard = new LoginGuard(loginService as any, navigationService);
@@ -23,7 +24,6 @@ describe('LoginGuard', () => {
   describe('#canActivate', () => {
     describe('for logged in user', () => {
       it('should be truthy', () => {
-        loginService.isLoggedIn$ = of(true);
         expect(guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot))
           .toBeTruthy();
       });
@@ -31,23 +31,32 @@ describe('LoginGuard', () => {
 
     describe('for not logged in user', () => {
       beforeEach(() => {
-        loginService.isLoggedIn$ = of(false);
+        isLoggedIn$.next(false);
       });
 
-      it('should be falsy', () => {
-        expect(guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot))
-          .toBeFalsy();
+      it('should be falsy', (done) => {
+        guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+          .subscribe((result) => {
+            expect(result).toBeFalsy();
+            done();
+          });
       });
 
-      it('should save redirectUrl', () => {
+      it('should save redirectUrl', (done) => {
         const url = 'url';
-        guard.canActivate({} as ActivatedRouteSnapshot, { url } as RouterStateSnapshot);
-        expect(loginService.redirectUrl).toBe(url);
+        guard.canActivate({} as ActivatedRouteSnapshot, { url } as RouterStateSnapshot)
+          .subscribe(() => {
+            expect(loginService.redirectUrl).toBe(url);
+            done();
+          });
       });
 
-      it('should navigate to Login page', () => {
-        expect(guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot));
-        expect(navigationService.navigateByUrl).toHaveBeenCalledWith(RouteName.Login);
+      it('should navigate to Login page', (done) => {
+        guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+          .subscribe(() => {
+            expect(navigationService.navigateByUrl).toHaveBeenCalledWith(RouteName.Login);
+            done();
+          });
       });
     });
   });

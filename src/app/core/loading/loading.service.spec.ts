@@ -1,12 +1,27 @@
-import { TestBed } from '@angular/core/testing';
-
 import { LoadingService } from './loading.service';
 
 describe('LoadingService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let service: LoadingService;
+
+  beforeEach(() => {
+    service = new LoadingService();
+  });
 
   it('should be created', () => {
-    const service: LoadingService = TestBed.get(LoadingService);
     expect(service).toBeTruthy();
+  });
+
+  it('#show should change state to true', () => {
+    service.show();
+    service.state$.subscribe((state) => {
+      expect(state).toBe(true);
+    });
+  });
+
+  it('#hide should change state to false', () => {
+    service.hide();
+    service.state$.subscribe((state) => {
+      expect(state).toBe(false);
+    });
   });
 });

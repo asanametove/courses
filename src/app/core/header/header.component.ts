@@ -23,12 +23,12 @@ export class HeaderComponent implements OnInit {
       .subscribe((user) => this.user = user);
   }
 
-  get loggedIn(): Observable<boolean> {
+  get isLoggedIn$(): Observable<boolean> {
     return this.loginService.isLoggedIn$;
   }
 
-  get loginShown(): Observable<boolean> {
-    return this.loggedIn.pipe(
+  get isLoginShown$(): Observable<boolean> {
+    return this.isLoggedIn$.pipe(
       map((isLoggedIn) => !isLoggedIn && !this.navigationService.isOnPage(RouteName.Login)),
     );
   }
