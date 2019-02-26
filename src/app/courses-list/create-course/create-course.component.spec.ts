@@ -8,22 +8,23 @@ import { NavigationService } from '@core/navigation/navigation.service';
 import { CourseUpdateInfo } from '@shared/course';
 import { MockComponent } from 'ng-mocks';
 import { EditCourseFormComponent } from '../edit-course-form/edit-course-form.component';
+import { BehaviorSubject } from 'rxjs';
 
 describe('CreateCourseComponent', () => {
   let component: CreateCourseComponent;
   let fixture: ComponentFixture<CreateCourseComponent>;
 
-  let coursesServiceMock: {
+  let coursesService: {
     createCourse: jasmine.Spy,
   };
 
-  let navigationServiceMock: {
+  let navigationService: {
     navigateByUrl: jasmine.Spy,
   };
 
   beforeEach(async(() => {
-    coursesServiceMock = jasmine.createSpyObj('CoursesService', ['createCourse']);
-    navigationServiceMock = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
+    coursesService = jasmine.createSpyObj('CoursesService', ['createCourse']);
+    navigationService = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
 
     TestBed.configureTestingModule({
       declarations: [
@@ -32,8 +33,8 @@ describe('CreateCourseComponent', () => {
       ],
       imports: [ FormsModule ],
       providers: [
-        { provide: CoursesService, useValue: coursesServiceMock },
-        { provide: NavigationService, useValue: navigationServiceMock },
+        { provide: CoursesService, useValue: coursesService },
+        { provide: NavigationService, useValue: navigationService },
       ],
     })
     .compileComponents();
@@ -50,6 +51,10 @@ describe('CreateCourseComponent', () => {
   });
 
   describe('#onSave', () => {
+    beforeEach(() => {
+      coursesService.createCourse.and.returnValue(new BehaviorSubject({}));
+    });
+
     it('should create course', () => {
       const title = 'title';
       const description = 'description';
@@ -58,19 +63,19 @@ describe('CreateCourseComponent', () => {
 
       component.onSave({ title, duration, description, date });
 
-      expect(coursesServiceMock.createCourse).toHaveBeenCalledWith(title, duration, description, date);
+      expect(coursesService.createCourse).toHaveBeenCalledWith(title, duration, description, date);
     });
 
     it('should navigate to courses', () => {
       component.onSave({} as CourseUpdateInfo);
-      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Courses);
+      expect(navigationService.navigateByUrl).toHaveBeenCalledWith(RouteName.Courses);
     });
   });
 
   describe('#onCancel', () => {
     it('should navigate to root', () => {
       component.onCancel();
-      expect(navigationServiceMock.navigateByUrl).toHaveBeenCalledWith(RouteName.Root);
+      expect(navigationService.navigateByUrl).toHaveBeenCalledWith(RouteName.Root);
     });
   });
 });

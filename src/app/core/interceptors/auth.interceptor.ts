@@ -2,6 +2,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { LocalStorageKey } from '@shared/local-storage-keys';
 import { Injectable } from '@angular/core';
+import { delay } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -15,7 +16,8 @@ export class AuthInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(req);
+    // delay added in order to see the spinner
+    return next.handle(req).pipe(delay(2000));
   }
 
 }

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
 import { CourseNotFoundError } from '@shared/errors';
 import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
 import * as api from '@shared/api';
+import { LoadingService } from '@core/loading/loading.service';
 
 @Injectable()
 export class CoursesService {
@@ -15,6 +16,7 @@ export class CoursesService {
 
   constructor(
     private http: HttpClient,
+    private loadingService: LoadingService,
   ) {}
 
   // TODO Create MappingService
@@ -48,18 +50,24 @@ export class CoursesService {
   }
 
   getCourses(config: CourseLoadConfig): Observable<Course[]> {
+    this.loadingService.show();
     return this.http.get(this.buildUrl(api.courses, config)).pipe(
       map((data: CourseRawData[]) => data.map(this.toCourse)),
+      tap(() => this.loadingService.hide()),
     );
   }
 
   createCourse(title: string, duration: number, description: string, date: Date): Observable<any> {
+    this.loadingService.show();
     return this.http.post(api.courses, {
       name: title,
       length: duration,
       description,
       date,
-    });
+    })
+      .pipe(
+        tap(() => this.loadingService.hide()),
+      );
   }
 
   getCourseById(id: string): Course {
@@ -77,6 +85,10 @@ export class CoursesService {
   }
 
   removeCourse(id: string): Observable<any> {
-    return this.http.delete(`${api.courses}/${id}`);
+    this.loadingService.show();
+    return this.http.delete(`${api.courses}/${id}`)
+      .pipe(
+        tap(() => this.loadingService.hide()),
+      );
   }
 }

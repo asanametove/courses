@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observer } from 'rxjs';
+import { Observer, Subject } from 'rxjs';
 import { Course } from '@shared/course';
 import { CoursesService } from '../core/courses/courses.service';
 import { CourseLoadConfig } from '@shared/common.interfaces';
+import { filter, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'courses-list',
@@ -13,6 +14,7 @@ export class CoursesListComponent implements OnInit {
   courses: Course[] = [];
 
   private query: string;
+  private query$ = new Subject<string>();
   private chunkSize = 5;
   private lastIndex = 0;
   private courseSaver: Observer<Course[]> = {
@@ -53,6 +55,15 @@ export class CoursesListComponent implements OnInit {
 
   ngOnInit() {
     this.loadCourses();
+    this.query$.pipe(
+      filter(({ length }) => !length || length > 2),
+      debounceTime(1000),
+    )
+      .subscribe((query) => {
+        this.query = query;
+        this.resetCourses();
+        this.loadCourses();
+      });
   }
 
   onDelete(id: string): void {
@@ -66,8 +77,6 @@ export class CoursesListComponent implements OnInit {
   }
 
   onSearch(query: string): void {
-    this.query = query;
-    this.resetCourses();
-    this.loadCourses();
+    this.query$.next(query);
   }
 }

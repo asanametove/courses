@@ -3,27 +3,49 @@ import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageKey } from '@shared/local-storage-keys';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@shared/user';
 import * as api from '@shared/api';
+import { LoadingService } from '@core/loading/loading.service';
 
 @Injectable()
 export class LoginService {
   private _redirectUrl: string;
+  private _userInfo$ = new BehaviorSubject<User>(null);
 
-  public userInfo$ = new Subject<User>();
+  public userInfo$ = this._userInfo$.asObservable();
+  public isLoggedIn$ = new Observable<boolean>((observer) => {
+    observer.next(!!this.token);
+  });
 
   constructor(
     private navigationService: NavigationService,
     private http: HttpClient,
+    private loadingService: LoadingService,
   ) {
     this.updateUserInfo();
   }
 
   private updateUserInfo(): void {
-    if (this.isLoggedIn()) {
+    if (this.token) {
       this.http.post(api.userInfo, null)
-        .subscribe((user: any) => this.userInfo$.next(user.name));
+        .subscribe((user: any) => this._userInfo$.next(user.name));
+    } else {
+      this._userInfo$.next(null);
+    }
+  }
+
+  private get token(): string {
+    return localStorage.getItem(LocalStorageKey.Token);
+  }
+
+  private handleLoginResult = ({ token }: any) => {
+    this.loadingService.hide();
+    localStorage.setItem(LocalStorageKey.Token, token);
+    this.updateUserInfo();
+    if (this.redirectUrl) {
+      this.navigationService.navigateByUrl(this.redirectUrl as RouteName);
+      this.redirectUrl = null;
     }
   }
 
@@ -36,24 +58,18 @@ export class LoginService {
   }
 
   logIn(login: string, password: string): void {
+    this.loadingService.show();
     this.http.post(api.login, { login, password })
-      .subscribe(({ token }: any) => {
-        localStorage.setItem(LocalStorageKey.Token, token);
-        this.updateUserInfo();
-        if (this.redirectUrl) {
-          this.navigationService.navigateByUrl(this.redirectUrl as RouteName);
-          this.redirectUrl = null;
-        }
-      });
+      .subscribe(
+        this.handleLoginResult,
+        () => this.loadingService.hide(),
+      );
   }
 
   logOut(): void {
     localStorage.removeItem(LocalStorageKey.Token);
     console.log('Logged out');
+    this.updateUserInfo();
     this.navigationService.navigateByUrl(RouteName.Login);
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem(LocalStorageKey.Token);
   }
 }

@@ -17,7 +17,6 @@
       "es2018",
       "dom"
     ],
-    "noUnusedLocals": true,
     "paths": {
       "@shared/*": ["src/app/shared/*"],
       "@core/*": ["src/app/core/*"]
