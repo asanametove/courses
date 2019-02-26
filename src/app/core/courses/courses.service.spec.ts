@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { of } from 'rxjs';
 import { CoursesService } from './courses.service';
 import { Course } from '@shared/course';
@@ -38,7 +39,8 @@ describe('CoursesService', () => {
     it('should make API call', (done) => {
       service.getCourses({start, count, textFragment}).subscribe(() => {
         expect(http.get).toHaveBeenCalledWith(
-          `${api.courses}?start=${start}&count=${count}&textFragment=${textFragment}`,
+          api.courses,
+          { params: jasmine.any(HttpParams) },
         );
         done();
       });

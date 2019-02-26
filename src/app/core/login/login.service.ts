@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
-import { HttpClient } from '@angular/common/http';
 import { LocalStorageKey } from '@shared/local-storage-keys';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@shared/user';
 import * as api from '@shared/api';
-import { LoadingService } from '@core/loading/loading.service';
 
 @Injectable()
 export class LoginService {
@@ -21,7 +20,6 @@ export class LoginService {
   constructor(
     private navigationService: NavigationService,
     private http: HttpClient,
-    private loadingService: LoadingService,
   ) {
     this.updateUserInfo();
   }
@@ -40,7 +38,6 @@ export class LoginService {
   }
 
   private handleLoginResult = ({ token }: any) => {
-    this.loadingService.hide();
     localStorage.setItem(LocalStorageKey.Token, token);
     this.updateUserInfo();
     if (this.redirectUrl) {
@@ -58,12 +55,9 @@ export class LoginService {
   }
 
   logIn(login: string, password: string): void {
-    this.loadingService.show();
-    this.http.post(api.login, { login, password })
-      .subscribe(
-        this.handleLoginResult,
-        () => this.loadingService.hide(),
-      );
+    this.http.post(api.login, { login, password }).subscribe(
+      this.handleLoginResult,
+    );
   }
 
   logOut(): void {

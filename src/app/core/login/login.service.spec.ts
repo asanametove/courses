@@ -83,11 +83,6 @@ describe('LoginService', () => {
       service.logIn(username, password);
       expect(service.redirectUrl).toBeNull();
     });
-
-    it('should show spinner', () => {
-      service.logIn(username, password);
-      expect(loadingService.show).toHaveBeenCalledBefore(loadingService.hide);
-    });
   });
 
   describe('#logOut', () => {

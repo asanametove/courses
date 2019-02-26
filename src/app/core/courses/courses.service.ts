@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
@@ -38,36 +38,29 @@ export class CoursesService {
     );
   }
 
-  // TODO Move it to separate service
-  private buildUrl(base: string, paramsMap: Object): string {
-    const paramsString = Object.entries(paramsMap)
-      .map((pair) => pair.join('='))
-      .join('&');
+    // TODO Move it to separate service
+  private getOptions(paramsMap: Object): { params: HttpParams } {
+    const params = Object.entries(paramsMap).reduce(
+      (acc, param) => acc.set(...param),
+      new HttpParams(),
+    );
 
-    return [base, paramsString]
-      .filter(Boolean)
-      .join('?');
+    return { params };
   }
 
   getCourses(config: CourseLoadConfig): Observable<Course[]> {
-    this.loadingService.show();
-    return this.http.get(this.buildUrl(api.courses, config)).pipe(
+    return this.http.get(api.courses, this.getOptions(config)).pipe(
       map((data: CourseRawData[]) => data.map(this.toCourse)),
-      tap(() => this.loadingService.hide()),
     );
   }
 
   createCourse(title: string, duration: number, description: string, date: Date): Observable<any> {
-    this.loadingService.show();
     return this.http.post(api.courses, {
       name: title,
       length: duration,
       description,
       date,
-    })
-      .pipe(
-        tap(() => this.loadingService.hide()),
-      );
+    });
   }
 
   getCourseById(id: string): Course {
@@ -85,10 +78,6 @@ export class CoursesService {
   }
 
   removeCourse(id: string): Observable<any> {
-    this.loadingService.show();
-    return this.http.delete(`${api.courses}/${id}`)
-      .pipe(
-        tap(() => this.loadingService.hide()),
-      );
+    return this.http.delete(`${api.courses}/${id}`);
   }
 }
