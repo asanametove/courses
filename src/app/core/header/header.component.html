@@ -7,7 +7,7 @@
   >Log in</a>
 
   <div *ngIf="isLoggedIn$ | async">
-    <span>{{ user?.first }} {{ user?.last }}</span>
+    <span>{{ user$ | async }}</span>
     <button type="button"
           class="btn btn-primary ml-2"
           (click)="logOut()"

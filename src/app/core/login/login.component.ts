@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { RouteName } from '@shared/route-name';
 import { NavigationService } from '../navigation/navigation.service';
 import { LoginService } from './login.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/reducers';
+import { Login } from '@store/actions/login-page.actions';
 
 @Component({
   selector: 'courses-login',
