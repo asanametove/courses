@@ -3,20 +3,24 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
-import { CourseNotFoundError } from '@shared/errors';
 import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
 import * as api from '@shared/api';
-import { LoadingService } from '@core/loading/loading.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/reducers';
+import { SaveCourses, ResetCourses } from '@store/actions/courses-page.actions';
 
 @Injectable()
 export class CoursesService {
+  private chunkSize = 5;
+  private lastIndex = 0;
+  private _isLoadAvailable: boolean;
 
   // TODO Remove after all methods integration with real API
   courses: Course[] = [];
 
   constructor(
     private http: HttpClient,
-    private loadingService: LoadingService,
+    private store: Store<AppState>,
   ) {}
 
   // TODO Create MappingService
@@ -39,7 +43,16 @@ export class CoursesService {
   }
 
     // TODO Move it to separate service
-  private getOptions(paramsMap: Object): { params: HttpParams } {
+  private getOptions(query?: string): { params: HttpParams } {
+    const paramsMap: CourseLoadConfig = {
+      start: this.lastIndex,
+      count: this.chunkSize,
+    };
+
+    if (query) {
+      paramsMap.textFragment = query;
+    }
+
     const params = Object.entries(paramsMap).reduce(
       (acc, param) => acc.set(...param),
       new HttpParams(),
@@ -48,9 +61,19 @@ export class CoursesService {
     return { params };
   }
 
-  getCourses(config: CourseLoadConfig): Observable<Course[]> {
-    return this.http.get(api.courses, this.getOptions(config)).pipe(
+  get isLoadAvailable(): boolean {
+    return this._isLoadAvailable;
+  }
+
+  getCourses(query: string): Observable<Course[]> {
+    const options = this.getOptions(query);
+
+    return this.http.get(api.courses, options).pipe(
       map((data: CourseRawData[]) => data.map(this.toCourse)),
+      tap((courses) => {
+        this._isLoadAvailable = courses.length === this.chunkSize;
+        this.lastIndex += this.chunkSize;
+      }),
     );
   }
 
@@ -63,21 +86,22 @@ export class CoursesService {
     });
   }
 
-  getCourseById(id: string): Course {
-    const course = this.courses.find((item) => id === item.id);
-    if (!course) {
-      throw new CourseNotFoundError();
-    }
-
-    return course;
+  getCourseById(id: string): Observable<Course> {
+    return this.http.get(`${api.courses}/${id}`).pipe(
+      map((data: CourseRawData) => this.toCourse(data)),
+    );
   }
 
-  updateCourse(id: string, payload: CourseUpdateInfo): void {
-    const course = this.getCourseById(id);
-    course.update(payload);
+  updateCourse(id: string, payload: CourseUpdateInfo): Observable<any> {
+    return this.http.post(`${api.courses}/${id}`, payload);
   }
 
   removeCourse(id: string): Observable<any> {
     return this.http.delete(`${api.courses}/${id}`);
+  }
+
+  resetCourses(): void {
+    this.lastIndex = 0;
+    this.store.dispatch(new ResetCourses());
   }
 }
