@@ -17,6 +17,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingService } from './loading/loading.service';
+import { InputErrorsComponent } from './validation/input-errors/input-errors.component';
+import { InputHighlightDirective } from './validation/input-highlight/input-highlight.directive';
 
 library.add(faSpinner);
 
@@ -28,6 +30,8 @@ library.add(faSpinner);
     PageNotFoundComponent,
     LoginComponent,
     LoadingComponent,
+    InputErrorsComponent,
+    InputHighlightDirective,
   ],
   imports: [
     CommonModule,
@@ -41,6 +45,8 @@ library.add(faSpinner);
     BreadcrumbsComponent,
     FooterComponent,
     LoadingComponent,
+    InputErrorsComponent,
+    InputHighlightDirective,
   ],
 })
 export class CoreModule {

@@ -1,6 +1,7 @@
 <section class="container mb-3">
   <h2>Edit course</h2>
   <courses-edit-course-form
+    *ngIf="course$ | async"
     [course]="course$ | async"
     (save)="onSave($event)"
     (cancel)="onCancel()"

@@ -1,57 +1,66 @@
-<form (ngSubmit)="onSave()">
+<form (ngSubmit)="onSave()" [formGroup]="courseForm">
 
   <div class="form-group">
     <label for="title">Title</label>
+    <courses-input-errors [control]="title"></courses-input-errors>
     <input type="text"
            class="form-control"
-           id="title"
            placeholder="Enter title"
-           name="title"
-           [(ngModel)]="course.title"
+           coursesInputHighlight
+           [formControl]="title"
     >
   </div>
 
   <div class="form-group">
     <label for="description">Description</label>
+    <courses-input-errors [control]="description"></courses-input-errors>
     <textarea class="form-control"
               id="description"
               rows="3"
               name="description"
-              [(ngModel)]="course.description"
+              [formControl]="description"
+              coursesInputHighlight
     ></textarea>
   </div>
 
   <div class="form-group w-25">
     <label for="date">Date</label>
-    <input type="date"
+    <courses-input-errors [control]="date"></courses-input-errors>
+    <input type="text"
            class="form-control"
            id="date"
            name="date"
-           [(ngModel)]="course.date"
+           [formControl]="date"
     >
   </div>
 
   <div class="form-group w-25">
     <label for="duration">Duration</label>
+    <courses-input-errors [control]="duration"></courses-input-errors>
     <input type="number"
            class="form-control"
            id="duration"
            name="duration"
-           [(ngModel)]="course.duration"
+           [formControl]="duration"
     >
   </div>
 
   <div class="form-group">
     <label for="authors">Authors</label>
+    <courses-input-errors [control]="authors"></courses-input-errors>
     <input type="text"
            class="form-control"
            id="authors"
            name="authors"
-           [(ngModel)]="course.authors"
+           [formControl]="authors"
     >
   </div>
 
-  <button type="submit" class="btn btn-primary mr-3">Save</button>
+  <button
+    type="submit"
+    class="btn btn-primary mr-3"
+    [disabled]="courseForm.invalid"
+  >Save</button>
   <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
 
 </form>

@@ -22,6 +22,6 @@ export interface CourseUpdateInfo {
   duration?: number;
   description?: string;
   topRated?: boolean;
-  date?: Date;
+  creationDate?: Date;
   authors?: string;
 }

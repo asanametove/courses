@@ -16,8 +16,8 @@ export class CreateCourseComponent {
     private navigationService: NavigationService,
   ) {}
 
-  onSave({ title, duration, description, date }: CourseUpdateInfo) {
-    this.coursesService.createCourse(title, duration, description, new Date(date))
+  onSave({ title, duration, description, creationDate }: CourseUpdateInfo) {
+    this.coursesService.createCourse(title, duration, description, new Date(creationDate))
       .subscribe(() => {
         this.navigationService.navigateByUrl(RouteName.Courses);
       });

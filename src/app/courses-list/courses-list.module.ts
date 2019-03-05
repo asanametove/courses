@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +17,7 @@ import { EditCourseFormComponent } from './edit-course-form/edit-course-form.com
 import { CreateCourseComponent } from './create-course/create-course.component';
 import { EffectsModule } from '@ngrx/effects';
 import { CoursesEffects } from '@store/effects/courses.effect';
+import { CoreModule } from '@core/core.module';
 
 library.add(faStar);
 
@@ -39,6 +40,8 @@ library.add(faStar);
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
+    CoreModule,
     FontAwesomeModule,
     CoursesRoutingModule,
     EffectsModule.forFeature([CoursesEffects]),
