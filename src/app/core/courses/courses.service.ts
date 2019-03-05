@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
 import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
 import * as api from '@shared/api';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/reducers';
-import { SaveCourses, ResetCourses } from '@store/actions/courses-page.actions';
+import { ResetCourses } from '@store/actions/courses-page.actions';
+import { UpdateCourseDetailsError } from '../../store/actions/course-details-page.actions';
 
 @Injectable()
 export class CoursesService {
@@ -93,7 +94,12 @@ export class CoursesService {
   }
 
   updateCourse(id: string, payload: CourseUpdateInfo): Observable<any> {
-    return this.http.post(`${api.courses}/${id}`, payload);
+    return this.http.post(`${api.courses}/${id}`, payload).pipe(
+      catchError((err) => {
+        console.error(err);
+        return of(new UpdateCourseDetailsError());
+      }),
+    );
   }
 
   removeCourse(id: string): Observable<any> {

@@ -5,6 +5,7 @@ export enum ActionTypes {
   Load = '[Course details page] Load course',
   Save = '[Course details page] Save course',
   Update = '[Course details page] Update course',
+  UpdateError = '[Course details page] Update course error',
   Reset = '[Course details page] Reset course',
 }
 
@@ -36,6 +37,9 @@ export class UpdateCourseDetails implements Action {
     public id: string,
     public payload: CourseUpdateInfo,
   ) {}
+}
+export class UpdateCourseDetailsError implements Action {
+  readonly type = ActionTypes.UpdateError;
 }
 
 export type CourseDetailsActions = SaveCourseDetails | ResetCourseDetails;
