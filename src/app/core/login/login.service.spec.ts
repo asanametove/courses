@@ -2,8 +2,9 @@ import { of } from 'rxjs';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { LoginService } from './login.service';
 import { RouteName } from '@shared/route-name';
-import { login } from '@shared/api';
+import { login, userInfo } from '@shared/api';
 import { LocalStorageKey } from '@shared/local-storage-keys';
+import { User } from '@shared/user';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -11,11 +12,20 @@ describe('LoginService', () => {
   let http: {
     post: jasmine.Spy,
   };
+  let loadingService: {
+    show: jasmine.Spy,
+    hide: jasmine.Spy,
+  };
 
   beforeEach(() => {
     navigationService = jasmine.createSpyObj('NavigationService', ['navigateByUrl']);
     http = jasmine.createSpyObj('Http', ['post']);
-    service = new LoginService(navigationService, http as any);
+    loadingService = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
+    service = new LoginService(
+      navigationService,
+      http as any,
+      loadingService as any,
+    );
   });
 
   it('should be created', () => {
@@ -50,8 +60,16 @@ describe('LoginService', () => {
       );
     });
 
-    // TODO cover user info updating
-    it('should update user info', () => {
+    it('should update user info', (done) => {
+      const newInfo = {} as User;
+      http.post.and.returnValues(of({ token }), of({ name: newInfo }));
+      spyOn(localStorage, 'getItem').and.returnValue('info');
+      service.logIn(username, password);
+      service.userInfo$.subscribe((info) => {
+        expect(http.post).toHaveBeenCalledWith(userInfo, null);
+        expect(info).toBe(newInfo);
+        done();
+      });
     });
 
     it('should navigate to redirectUrl if it exists', () => {
@@ -81,14 +99,20 @@ describe('LoginService', () => {
   });
 
   describe('#isLoggedIn', () => {
-    it('should be true if there is user info in local storage', () => {
+    it('should be true if there is user info in local storage', (done) => {
       spyOn(localStorage, 'getItem').and.returnValue('info');
-      expect(service.isLoggedIn$).toBe(true);
+      service.isLoggedIn$.subscribe((isLoggedIn) => {
+        expect(isLoggedIn).toBe(true);
+        done();
+      });
     });
 
-    it('should be false if there is no user info in local storage', () => {
+    it('should be false if there is no user info in local storage', (done) => {
       spyOn(localStorage, 'getItem').and.returnValue(null);
-      expect(service.isLoggedIn$).toBe(false);
+      service.isLoggedIn$.subscribe((isLoggedIn) => {
+        expect(isLoggedIn).toBe(false);
+        done();
+      });
     });
   });
 });

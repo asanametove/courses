@@ -12,7 +12,7 @@ export class LoadingComponent {
     private loadingService: LoadingService,
   ) {}
 
-  public get isSpinnerShown() {
+  public get isSpinnerShown$() {
     return this.loadingService.state$;
   }
 

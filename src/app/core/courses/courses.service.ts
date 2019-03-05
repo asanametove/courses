@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
-import { CourseNotFoundError } from '@shared/errors';
 import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
 import * as api from '@shared/api';
-import { LoadingService } from '@core/loading/loading.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/reducers';
+import { ResetCourses } from '@store/actions/courses-page.actions';
+import { UpdateCourseDetailsError } from '../../store/actions/course-details-page.actions';
 
 @Injectable()
 export class CoursesService {
+  private chunkSize = 5;
+  private lastIndex = 0;
+  private _isLoadAvailable: boolean;
 
   // TODO Remove after all methods integration with real API
   courses: Course[] = [];
 
   constructor(
     private http: HttpClient,
-    private loadingService: LoadingService,
+    private store: Store<AppState>,
   ) {}
 
   // TODO Create MappingService
@@ -38,57 +43,71 @@ export class CoursesService {
     );
   }
 
-  // TODO Move it to separate service
-  private buildUrl(base: string, paramsMap: Object): string {
-    const paramsString = Object.entries(paramsMap)
-      .map((pair) => pair.join('='))
-      .join('&');
+    // TODO Move it to separate service
+  private getOptions(query?: string): { params: HttpParams } {
+    const paramsMap: CourseLoadConfig = {
+      start: this.lastIndex,
+      count: this.chunkSize,
+    };
 
-    return [base, paramsString]
-      .filter(Boolean)
-      .join('?');
+    if (query) {
+      paramsMap.textFragment = query;
+    }
+
+    const params = Object.entries(paramsMap).reduce(
+      (acc, param) => acc.set(...param),
+      new HttpParams(),
+    );
+
+    return { params };
   }
 
-  getCourses(config: CourseLoadConfig): Observable<Course[]> {
-    this.loadingService.show();
-    return this.http.get(this.buildUrl(api.courses, config)).pipe(
+  get isLoadAvailable(): boolean {
+    return this._isLoadAvailable;
+  }
+
+  getCourses(query: string): Observable<Course[]> {
+    const options = this.getOptions(query);
+
+    return this.http.get(api.courses, options).pipe(
       map((data: CourseRawData[]) => data.map(this.toCourse)),
-      tap(() => this.loadingService.hide()),
+      tap((courses) => {
+        this._isLoadAvailable = courses.length === this.chunkSize;
+        this.lastIndex += this.chunkSize;
+      }),
     );
   }
 
   createCourse(title: string, duration: number, description: string, date: Date): Observable<any> {
-    this.loadingService.show();
     return this.http.post(api.courses, {
       name: title,
       length: duration,
       description,
       date,
-    })
-      .pipe(
-        tap(() => this.loadingService.hide()),
-      );
+    });
   }
 
-  getCourseById(id: string): Course {
-    const course = this.courses.find((item) => id === item.id);
-    if (!course) {
-      throw new CourseNotFoundError();
-    }
-
-    return course;
+  getCourseById(id: string): Observable<Course> {
+    return this.http.get(`${api.courses}/${id}`).pipe(
+      map((data: CourseRawData) => this.toCourse(data)),
+    );
   }
 
-  updateCourse(id: string, payload: CourseUpdateInfo): void {
-    const course = this.getCourseById(id);
-    course.update(payload);
+  updateCourse(id: string, payload: CourseUpdateInfo): Observable<any> {
+    return this.http.post(`${api.courses}/${id}`, payload).pipe(
+      catchError((err) => {
+        console.error(err);
+        return of(new UpdateCourseDetailsError());
+      }),
+    );
   }
 
   removeCourse(id: string): Observable<any> {
-    this.loadingService.show();
-    return this.http.delete(`${api.courses}/${id}`)
-      .pipe(
-        tap(() => this.loadingService.hide()),
-      );
+    return this.http.delete(`${api.courses}/${id}`);
+  }
+
+  resetCourses(): void {
+    this.lastIndex = 0;
+    this.store.dispatch(new ResetCourses());
   }
 }

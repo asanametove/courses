@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RouteName } from '@shared/route-name';
@@ -10,27 +10,26 @@ import { NavigationService } from '../navigation/navigation.service';
   selector: 'courses-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
-  user: User;
-
+export class HeaderComponent {
   constructor(
     private loginService: LoginService,
     private navigationService: NavigationService,
   ) {}
 
-  ngOnInit(): void {
-    this.loginService.userInfo$
-      .subscribe((user) => this.user = user);
+  get isLoggedIn$(): Observable<boolean> {
+    return this.user$.pipe(
+      map((user) => user.isLoggedIn),
+    );
   }
 
-  get loggedIn(): Observable<boolean> {
-    return this.loginService.isLoggedIn$;
-  }
-
-  get loginShown(): Observable<boolean> {
-    return this.loggedIn.pipe(
+  get isLoginShown$(): Observable<boolean> {
+    return this.isLoggedIn$.pipe(
       map((isLoggedIn) => !isLoggedIn && !this.navigationService.isOnPage(RouteName.Login)),
     );
+  }
+
+  get user$(): Observable<User> {
+    return this.loginService.user$;
   }
 
   logOut() {

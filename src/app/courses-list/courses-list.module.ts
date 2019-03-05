@@ -15,6 +15,8 @@ import { CoursesRoutingModule } from './courses-routing.module';
 import { EditCourseComponent } from './edit-course/edit-course.component';
 import { EditCourseFormComponent } from './edit-course-form/edit-course-form.component';
 import { CreateCourseComponent } from './create-course/create-course.component';
+import { EffectsModule } from '@ngrx/effects';
+import { CoursesEffects } from '@store/effects/courses.effect';
 
 library.add(faStar);
 
@@ -39,6 +41,7 @@ library.add(faStar);
     FormsModule,
     FontAwesomeModule,
     CoursesRoutingModule,
+    EffectsModule.forFeature([CoursesEffects]),
   ],
   providers: [
     FilterPipe,

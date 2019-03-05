@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { of } from 'rxjs';
 import { CoursesService } from './courses.service';
 import { Course } from '@shared/course';
@@ -10,6 +11,7 @@ describe('CoursesService', () => {
     post: jasmine.Spy,
     delete: jasmine.Spy,
   };
+  let loadingService: {};
   let courses: Course[];
 
   const fakeDate = '2000-01-01';
@@ -19,12 +21,13 @@ describe('CoursesService', () => {
 
   beforeEach(() => {
     http = jasmine.createSpyObj('Http', ['get', 'post', 'delete']);
+    loadingService = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
     http.get.and.returnValue(of(courses = [
       new Course('', 1, 'des1'),
       new Course('course2', 2, 'des2'),
     ]));
 
-    service = new CoursesService(http as any);
+    service = new CoursesService(http as any, loadingService as any);
   });
 
   it('should be created', () => {
@@ -36,7 +39,8 @@ describe('CoursesService', () => {
     it('should make API call', (done) => {
       service.getCourses({start, count, textFragment}).subscribe(() => {
         expect(http.get).toHaveBeenCalledWith(
-          `${api.courses}?start=${start}&count=${count}&textFragment=${textFragment}`,
+          api.courses,
+          { params: jasmine.any(HttpParams) },
         );
         done();
       });
@@ -51,6 +55,10 @@ describe('CoursesService', () => {
   });
 
   describe('#createCourse', () => {
+    beforeEach(() => {
+      http.post.and.returnValue(of({}));
+    });
+
     it('should make POST request to courses API', () => {
       const name = 'name';
       const length = 1;
@@ -81,6 +89,10 @@ describe('CoursesService', () => {
   });
 
   describe('#removeCourse', () => {
+    beforeEach(() => {
+      http.delete.and.returnValue(of({}));
+    });
+
     it('should make DELETE request to courses API', () => {
       const id = 'id';
       service.removeCourse(id);

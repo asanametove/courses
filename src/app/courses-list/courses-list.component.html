@@ -3,7 +3,7 @@
   <courses-toolbox (search)="onSearch($event)"></courses-toolbox>
 
   <ul>
-    <courses-list-item *ngFor="let course of courses"
+    <courses-list-item *ngFor="let course of courses$ | async"
                        [course]="course"
                        (deleteCourse)="onDelete($event)"
     ></courses-list-item>
@@ -14,7 +14,7 @@
           *ngIf="isLoadAvailable"
   >Load more</button>
 
-  <div class="alert alert-danger" *ngIf="!courses.length">
+  <div class="alert alert-danger" *ngIf="!(courses$ | async).length">
     No data. Feel free to add new course.
   </div>
 

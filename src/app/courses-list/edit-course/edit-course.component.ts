@@ -4,6 +4,9 @@ import { Course, CourseUpdateInfo } from '@shared/course';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
+import { Store } from '@ngrx/store';
+import { AppState, selectCourseDetails } from '@store/reducers';
+import { LoadCourseDetails, UpdateCourseDetails } from '@store/actions/course-details-page.actions';
 
 @Component({
   selector: 'courses-edit-course',
@@ -12,22 +15,25 @@ import { RouteName } from '@shared/route-name';
 })
 export class EditCourseComponent implements OnInit {
 
-  course: Course;
+  course$ =  this.store.select(selectCourseDetails);
 
   constructor(
-    private coursesService: CoursesService,
+    private store: Store<AppState>,
     private route: ActivatedRoute,
     private navigationService: NavigationService,
   ) { }
 
-  ngOnInit() {
-    const { id } = this.route.snapshot.params;
-    this.course = this.coursesService.getCourseById(id);
+  private get id(): string {
+    return this.route.snapshot.params.id;
   }
 
+  ngOnInit(): void {
+    this.store.dispatch(new LoadCourseDetails(this.id));
+  }
+
+  // TODO Create Interceptor for errors
   onSave(courseInfo: CourseUpdateInfo): void {
-    this.coursesService.updateCourse(this.course.id, courseInfo);
-    this.navigationService.navigateByUrl(RouteName.Courses);
+    this.store.dispatch(new UpdateCourseDetails(this.id, courseInfo));
   }
 
   onCancel(): void {

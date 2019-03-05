@@ -53,9 +53,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   private getText(urlPart: string): string {
     const route = this.router.config.find(({ path }) => path.includes(urlPart));
+    return 'Title';
 
-    return route && route.data
-      ? route.data.label
-      : this.coursesService.getCourseById(urlPart).title;
+    // return route && route.data
+    //   ? route.data.label
+    //   : this.coursesService.getCourseById(urlPart).title;
   }
 }

@@ -1,56 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { Observer, Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Course } from '@shared/course';
 import { CoursesService } from '../core/courses/courses.service';
-import { CourseLoadConfig } from '@shared/common.interfaces';
 import { filter, debounceTime } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState, selectCourses } from '@store/reducers';
+import { LoadCourses } from '@store/actions/courses-page.actions';
 
 @Component({
   selector: 'courses-list',
   templateUrl: './courses-list.component.html',
 })
 export class CoursesListComponent implements OnInit {
-  isLoadAvailable = false;
-  courses: Course[] = [];
-
   private query: string;
   private query$ = new Subject<string>();
-  private chunkSize = 5;
-  private lastIndex = 0;
-  private courseSaver: Observer<Course[]> = {
-    next: chunk => {
-      this.courses = [...this.courses, ...chunk];
-      this.isLoadAvailable = chunk.length === this.chunkSize;
-    },
-    error: (error) => { throw error; },
-    complete: () => {},
-  };
+  public courses$ = this.store.select(selectCourses);
 
   constructor(
     private coursesService: CoursesService,
+    private store: Store<AppState>,
   ) {}
 
-  private get coursesLoadParams(): CourseLoadConfig {
-    const config: CourseLoadConfig = {
-      start: this.lastIndex,
-      count: this.chunkSize,
-    };
-
-    return this.query
-      ? { ...config, textFragment: this.query }
-      : config;
+  private resetCourses(): void {
+    this.coursesService.resetCourses();
   }
 
-  private resetCourses(): void {
-    this.courses = [];
-    this.lastIndex = 0;
+  get isLoadAvailable(): boolean {
+    return this.coursesService.isLoadAvailable;
   }
 
   loadCourses(): void {
-    this.coursesService.getCourses(this.coursesLoadParams)
-      .subscribe(this.courseSaver);
-
-    this.lastIndex += this.chunkSize;
+    this.store.dispatch(new LoadCourses(this.query));
   }
 
   ngOnInit() {
