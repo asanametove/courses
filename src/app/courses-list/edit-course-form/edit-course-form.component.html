@@ -17,7 +17,6 @@
     <textarea class="form-control"
               id="description"
               rows="3"
-              name="description"
               [formControl]="description"
               coursesInputHighlight
     ></textarea>
@@ -26,23 +25,20 @@
   <div class="form-group w-25">
     <label for="date">Date</label>
     <courses-input-errors [control]="date"></courses-input-errors>
-    <input type="text"
-           class="form-control"
+    <courses-date-input
            id="date"
-           name="date"
            [formControl]="date"
-    >
+    ></courses-date-input>
   </div>
 
   <div class="form-group w-25">
     <label for="duration">Duration</label>
     <courses-input-errors [control]="duration"></courses-input-errors>
-    <input type="number"
-           class="form-control"
-           id="duration"
-           name="duration"
-           [formControl]="duration"
-    >
+    <courses-number-input
+      type="text"
+      id="duration"
+      [formControl]="duration"
+    ></courses-number-input>
   </div>
 
   <div class="form-group">
@@ -51,7 +47,6 @@
     <input type="text"
            class="form-control"
            id="authors"
-           name="authors"
            [formControl]="authors"
     >
   </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CourseUpdateInfo } from '@shared/course';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DateTimeService } from 'src/app/utils/date-time-service';
 
 @Component({
   selector: 'courses-edit-course-form',
@@ -15,6 +16,7 @@ export class EditCourseFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private dateTimeService: DateTimeService,
   ) {}
 
   get controls() { return this.courseForm.controls; }
@@ -48,7 +50,8 @@ export class EditCourseFormComponent implements OnInit {
     this.courseForm = this.formBuilder.group({
       title: [ title, [Validators.required, Validators.maxLength(50)] ],
       description: [ description, [ Validators.required, Validators.maxLength(500)] ],
-      date: [ String(creationDate || ''), [ Validators.required] ],
+      // TODO may fail on create course
+      date: [ this.dateTimeService.dateToString(creationDate), [ Validators.required] ],
       duration: [ duration, [ Validators.required] ],
       authors: [ authors, [ Validators.required] ],
     });

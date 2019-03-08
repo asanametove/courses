@@ -19,6 +19,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoadingService } from './loading/loading.service';
 import { InputErrorsComponent } from './validation/input-errors/input-errors.component';
 import { InputHighlightDirective } from './validation/input-highlight/input-highlight.directive';
+import { DateInputComponent } from './custom-controls/date-input/date-input.component';
+import { NumberInputComponent } from './custom-controls/number-input/number-input.component';
 
 library.add(faSpinner);
 
@@ -32,6 +34,8 @@ library.add(faSpinner);
     LoadingComponent,
     InputErrorsComponent,
     InputHighlightDirective,
+    DateInputComponent,
+    NumberInputComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +51,8 @@ library.add(faSpinner);
     LoadingComponent,
     InputErrorsComponent,
     InputHighlightDirective,
+    DateInputComponent,
+    NumberInputComponent,
   ],
 })
 export class CoreModule {

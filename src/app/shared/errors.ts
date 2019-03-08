@@ -3,3 +3,9 @@ export class CourseNotFoundError extends Error {
     super('Course not found');
   }
 }
+
+export class InvalidDateFormatError extends Error {
+  constructor() {
+    super('Invalid Date');
+  }
+}
