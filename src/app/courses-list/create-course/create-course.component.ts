@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouteName } from '@shared/route-name';
 import { CoursesService } from '@core/courses/courses.service';
 import { NavigationService } from '@core/navigation/navigation.service';
-import { CourseUpdateInfo } from '@shared/course';
+import { CourseUpdateInfo, Course } from '@shared/course';
 
 @Component({
   selector: 'courses-create-course',
@@ -16,8 +16,8 @@ export class CreateCourseComponent {
     private navigationService: NavigationService,
   ) {}
 
-  onSave({ title, duration, description, creationDate }: CourseUpdateInfo) {
-    this.coursesService.createCourse(title, duration, description, new Date(creationDate))
+  onSave(course: Course) {
+    this.coursesService.createCourse(course)
       .subscribe(() => {
         this.navigationService.navigateByUrl(RouteName.Courses);
       });

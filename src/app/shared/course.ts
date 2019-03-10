@@ -1,20 +1,38 @@
-import { Durable, Identifiable, WithCreationDate } from './common.interfaces';
+import { Durable, Identifiable, WithCreationDate, Author } from './common.interfaces';
 
 export class Course implements Durable, Identifiable, WithCreationDate {
-    private static id = 0;
 
-    constructor(
-        public title: string,
-        public duration: number,
-        public description: string,
-        public creationDate = new Date(),
-        public id = String(++Course.id),
-        public topRated = false,
-    ) {}
+  public title: string;
+  public duration: number;
+  public description: string;
+  public creationDate: Date;
+  public id: string;
+  public topRated: boolean;
+  public authors: Author[];
 
-    update(payload: CourseUpdateInfo) {
-      Object.assign(this, payload);
-    }
+  constructor({
+    title = '',
+    duration = null,
+    description = '',
+    creationDate = new Date(),
+    id = null,
+    topRated = false,
+    authors = [],
+  } = {}) {
+    Object.assign(this, {
+      title,
+      duration,
+      description,
+      creationDate,
+      id,
+      topRated,
+      authors,
+    });
+  }
+
+  public update(payload: CourseUpdateInfo) {
+    Object.assign(this, payload);
+  }
 }
 
 export interface CourseUpdateInfo {
@@ -23,5 +41,5 @@ export interface CourseUpdateInfo {
   description?: string;
   topRated?: boolean;
   creationDate?: Date;
-  authors?: string;
+  authors?: Author[];
 }

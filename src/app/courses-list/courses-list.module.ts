@@ -18,6 +18,7 @@ import { CreateCourseComponent } from './create-course/create-course.component';
 import { EffectsModule } from '@ngrx/effects';
 import { CoursesEffects } from '@store/effects/courses.effect';
 import { CoreModule } from '@core/core.module';
+import { AuthorsService } from '@core/authors.service';
 
 library.add(faStar);
 
@@ -48,6 +49,7 @@ library.add(faStar);
   ],
   providers: [
     FilterPipe,
+    AuthorsService,
   ],
 })
 export class CoursesListModule { }

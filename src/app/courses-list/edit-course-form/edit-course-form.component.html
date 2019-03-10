@@ -1,24 +1,30 @@
-<form (ngSubmit)="onSave()" [formGroup]="courseForm">
+<form
+  *ngIf="initialized"
+  (ngSubmit)="onSave()"
+  [formGroup]="courseForm"
+>
 
   <div class="form-group">
     <label for="title">Title</label>
     <courses-input-errors [control]="title"></courses-input-errors>
-    <input type="text"
-           class="form-control"
-           placeholder="Enter title"
-           coursesInputHighlight
-           [formControl]="title"
+    <input 
+      type="text"
+      class="form-control"
+      placeholder="Enter title"
+      coursesInputHighlight
+      [formControl]="title"
     >
   </div>
 
   <div class="form-group">
     <label for="description">Description</label>
     <courses-input-errors [control]="description"></courses-input-errors>
-    <textarea class="form-control"
-              id="description"
-              rows="3"
-              [formControl]="description"
-              coursesInputHighlight
+    <textarea 
+      class="form-control"
+      id="description"
+      rows="3"
+      [formControl]="description"
+      coursesInputHighlight
     ></textarea>
   </div>
 
@@ -26,8 +32,8 @@
     <label for="date">Date</label>
     <courses-input-errors [control]="date"></courses-input-errors>
     <courses-date-input
-           id="date"
-           [formControl]="date"
+      id="date"
+      [formControl]="date"
     ></courses-date-input>
   </div>
 
@@ -44,11 +50,14 @@
   <div class="form-group">
     <label for="authors">Authors</label>
     <courses-input-errors [control]="authors"></courses-input-errors>
-    <input type="text"
-           class="form-control"
-           id="authors"
-           [formControl]="authors"
-    >
+    <courses-cloud-tags-input
+      class="form-control"
+      id="authors"
+      [formControl]="authors"
+      [selectedItems]="authors.value"
+      [itemsToSelect]="authorsToAdd"
+      coursesInputHighlight
+    ></courses-cloud-tags-input>
   </div>
 
   <button
