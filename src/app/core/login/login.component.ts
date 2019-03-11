@@ -2,25 +2,30 @@ import { Component } from '@angular/core';
 import { RouteName } from '@shared/route-name';
 import { NavigationService } from '../navigation/navigation.service';
 import { LoginService } from './login.service';
-import { Store } from '@ngrx/store';
-import { AppState } from '@store/reducers';
-import { Login } from '@store/actions/login-page.actions';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'courses-login',
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
-  username: string;
-  password: string;
+  public loginForm = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+  });
 
   constructor(
     private loginService: LoginService,
     private navigationService: NavigationService,
   ) {}
 
-  logIn(): void {
-    this.loginService.logIn(this.username, this.password);
+  public get username() { return this.loginForm.controls.username; }
+
+  public get password() { return this.loginForm.controls.password; }
+
+  public logIn(): void {
+    const { username, password } = this.loginForm.value;
+    this.loginService.logIn(username, password);
     this.navigationService.navigateByUrl(RouteName.Root);
   }
 }

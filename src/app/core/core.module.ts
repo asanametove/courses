@@ -8,7 +8,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationService } from './navigation/navigation.service';
 import { CoursesService } from './courses/courses.service';
 import { UtilsModule } from '../utils/utils.module';
@@ -44,6 +44,7 @@ library.add(faSpinner);
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     UtilsModule,
     FontAwesomeModule,
     NgbTypeaheadModule,

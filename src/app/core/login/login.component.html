@@ -1,18 +1,30 @@
 <section class="container mb-3 w-25">
-
-  <input type="text"
-         class="form-control mb-3"
-         placeholder="Username"
-         [(ngModel)]="username"
+  <form
+    (ngSubmit)="logIn()"
+    [formGroup]="loginForm"
   >
-  <input type="password"
-         class="form-control mb-3"
-         placeholder="Password"
-         [(ngModel)]="password"
-  >
-  <button type="button"
-          class="btn btn-primary"
-          (click)="logIn()"
-  >Log in</button>
+    <courses-input-errors
+      [control]="username"
+    ></courses-input-errors>
+    <input type="text"
+          class="form-control mb-3"
+          placeholder="Username"
+          formControlName="username"
+          coursesInputHighlight
+    >
+    <courses-input-errors
+      [control]="password"
+    ></courses-input-errors>
+    <input type="password"
+          class="form-control mb-3"
+          placeholder="Password"
+          formControlName="password"
+          coursesInputHighlight
+    >
+    <button type="submit"
+            class="btn btn-primary"
+            [disabled]="loginForm.invalid"
+    >Log in</button>
+  </form>
 
 </section>
