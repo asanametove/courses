@@ -55,14 +55,14 @@ export class CloudTagsInputComponent implements OnInit, ControlValueAccessor {
     this.onChange(this._selectedItems);
     this.model = '';
     this.cdRef.detectChanges();
-    this._itemsToSelect = this._itemsToSelect.filter(this.byNotId(item.id));
+    this._itemsToSelect = this._itemsToSelect.filter(({ id }) => !this.isSameId(id, item));
   }
 
   public onRemove(id: string): void {
     this.onTouched();
-    const itemToRemove = this._selectedItems.find(this.byId(id));
+    const itemToRemove = this._selectedItems.find((item) => this.isSameId(id, item));
     this._itemsToSelect.push(itemToRemove);
-    this._selectedItems = this._selectedItems.filter(this.byNotId(id));
+    this._selectedItems = this._selectedItems.filter((item) => !this.isSameId(id, item));
     this.onChange(this._selectedItems);
   }
 
@@ -79,8 +79,6 @@ export class CloudTagsInputComponent implements OnInit, ControlValueAccessor {
 
   public formatter = (result: any) => result.name;
 
-  private byId = (id: string) => (item: Identifiable) => item.id === id;
-
-  private byNotId = (id: string) => (item: Identifiable) => item.id !== id;
+  private isSameId = (id: string, item: Identifiable) => item.id === id;
 
 }
