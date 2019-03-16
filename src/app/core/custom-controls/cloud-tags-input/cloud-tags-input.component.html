@@ -1,0 +1,22 @@
+<span
+  class="badge badge-pill badge-primary mr-1"
+  *ngFor="let item of selectedItems"
+>
+  {{ item.name }}
+  <button
+    type="button"
+    class="btn-remove"
+    (click)="onRemove(item.id)"
+    >x</button>
+</span>
+
+<input
+  type="text"
+  class="inp-borderless"
+  [ngbTypeahead]="search"
+  [resultFormatter]="formatter"
+  [inputFormatter]="formatter"
+  (selectItem)="onSelect($event)"
+  (blur)="onTouched()"
+  [(ngModel)]="model"
+/>

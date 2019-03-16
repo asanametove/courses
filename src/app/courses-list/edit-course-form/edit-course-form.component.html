@@ -1,57 +1,70 @@
-<form (ngSubmit)="onSave()">
+<form
+  *ngIf="initialized"
+  (ngSubmit)="onSave()"
+  [formGroup]="courseForm"
+>
 
   <div class="form-group">
     <label for="title">Title</label>
-    <input type="text"
-           class="form-control"
-           id="title"
-           placeholder="Enter title"
-           name="title"
-           [(ngModel)]="course.title"
+    <courses-input-errors [control]="title"></courses-input-errors>
+    <input 
+      type="text"
+      class="form-control"
+      placeholder="Enter title"
+      coursesInputHighlight
+      [formControl]="title"
     >
   </div>
 
   <div class="form-group">
     <label for="description">Description</label>
-    <textarea class="form-control"
-              id="description"
-              rows="3"
-              name="description"
-              [(ngModel)]="course.description"
+    <courses-input-errors [control]="description"></courses-input-errors>
+    <textarea 
+      class="form-control"
+      id="description"
+      rows="3"
+      [formControl]="description"
+      coursesInputHighlight
     ></textarea>
   </div>
 
   <div class="form-group w-25">
     <label for="date">Date</label>
-    <input type="date"
-           class="form-control"
-           id="date"
-           name="date"
-           [(ngModel)]="course.date"
-    >
+    <courses-input-errors [control]="date"></courses-input-errors>
+    <courses-date-input
+      id="date"
+      [formControl]="date"
+    ></courses-date-input>
   </div>
 
   <div class="form-group w-25">
     <label for="duration">Duration</label>
-    <input type="number"
-           class="form-control"
-           id="duration"
-           name="duration"
-           [(ngModel)]="course.duration"
-    >
+    <courses-input-errors [control]="duration"></courses-input-errors>
+    <courses-number-input
+      type="text"
+      id="duration"
+      [formControl]="duration"
+    ></courses-number-input>
   </div>
 
   <div class="form-group">
     <label for="authors">Authors</label>
-    <input type="text"
-           class="form-control"
-           id="authors"
-           name="authors"
-           [(ngModel)]="course.authors"
-    >
+    <courses-input-errors [control]="authors"></courses-input-errors>
+    <courses-cloud-tags-input
+      class="form-control"
+      id="authors"
+      [formControl]="authors"
+      [selectedItems]="authors.value"
+      [itemsToSelect]="authorsToAdd"
+      coursesInputHighlight
+    ></courses-cloud-tags-input>
   </div>
 
-  <button type="submit" class="btn btn-primary mr-3">Save</button>
+  <button
+    type="submit"
+    class="btn btn-primary mr-3"
+    [disabled]="courseForm.invalid"
+  >Save</button>
   <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
 
 </form>

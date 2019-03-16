@@ -1,15 +1,20 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'courses-toolbox',
   templateUrl: './toolbox.component.html',
 })
-export class ToolboxComponent {
-  @Output() search = new EventEmitter<string>();
+export class ToolboxComponent implements OnInit {
+  @Output() public search = new EventEmitter<string>();
 
-  query = '';
+  public searchForm = new FormGroup({
+    query: new FormControl(''),
+  });
 
-  onQueryChange(): void {
-    this.search.emit(this.query.toLowerCase());
+  public ngOnInit() {
+    this.searchForm.valueChanges.subscribe(({ query }) => {
+      this.search.emit(query.toLowerCase());
+    });
   }
 }

@@ -1,0 +1,9 @@
+<input
+  type="text"
+  class="form-control"
+  [placeholder]="placeholder"
+  [value]="value"
+  (input)="onChange($event.target.value)"
+  (blur)="onTouched()"
+  coursesInputHighlight
+>

@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Course, CourseUpdateInfo } from '@shared/course';
-import { CourseRawData, CourseLoadConfig } from '@shared/common.interfaces';
+import { CourseRawData, CourseLoadConfig, Author } from '@shared/common.interfaces';
 import * as api from '@shared/api';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/reducers';
 import { ResetCourses } from '@store/actions/courses-page.actions';
 import { UpdateCourseDetailsError } from '../../store/actions/course-details-page.actions';
+import { DateTimeService } from 'src/app/utils/date-time-service';
 
 @Injectable()
 export class CoursesService {
@@ -22,26 +23,50 @@ export class CoursesService {
   constructor(
     private http: HttpClient,
     private store: Store<AppState>,
+    private dateTimeService: DateTimeService,
   ) {}
 
   // TODO Create MappingService
-  private toCourse({
+  private toCourse = ({
     name: title,
     length: duration,
     description,
     date: creationDate,
     id,
     isTopRated: topRated,
-  }: CourseRawData): Course {
-    return new Course(
-      title,
-      duration,
-      description,
-      new Date(creationDate),
-      String(id),
-      topRated,
-    );
+    authors,
+  }: CourseRawData): Course => new Course({
+    title,
+    duration,
+    description,
+    creationDate: new Date(creationDate),
+    id: String(id),
+    topRated,
+    authors: authors.map(this.toAuthor),
+  })
+
+  private toAuthor = (data: any): Author => {
+    let { name } = data;
+    const { firstName, lastName, id } = data;
+    name = name || [firstName, lastName].join(' ');
+    return { name, id };
   }
+
+  private toCourseDto = ({
+    title: name,
+    duration: length,
+    description,
+    creationDate: date,
+    topRated: isTopRated,
+    authors,
+  }: Course): CourseRawData => ({
+    name,
+    length,
+    description,
+    date: date.toString(),
+    isTopRated,
+    authors,
+  })
 
     // TODO Move it to separate service
   private getOptions(query?: string): { params: HttpParams } {
@@ -78,27 +103,18 @@ export class CoursesService {
     );
   }
 
-  createCourse(title: string, duration: number, description: string, date: Date): Observable<any> {
-    return this.http.post(api.courses, {
-      name: title,
-      length: duration,
-      description,
-      date,
-    });
+  createCourse(course: Course): Observable<any> {
+    return this.http.post(api.courses, this.toCourseDto(course)).pipe(
+      catchError((err) => {
+        console.error(err);
+        return of(new UpdateCourseDetailsError());
+      }),
+    );
   }
 
   getCourseById(id: string): Observable<Course> {
     return this.http.get(`${api.courses}/${id}`).pipe(
       map((data: CourseRawData) => this.toCourse(data)),
-    );
-  }
-
-  updateCourse(id: string, payload: CourseUpdateInfo): Observable<any> {
-    return this.http.post(`${api.courses}/${id}`, payload).pipe(
-      catchError((err) => {
-        console.error(err);
-        return of(new UpdateCourseDetailsError());
-      }),
     );
   }
 

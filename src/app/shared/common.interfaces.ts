@@ -18,7 +18,7 @@ export interface CourseRawData {
   authors: Author[];
   date: string;
   description: string;
-  id: number;
+  id?: number;
   isTopRated: boolean;
   length: number;
   name: string;
@@ -31,7 +31,6 @@ export interface CourseLoadConfig {
 }
 
 export interface Author {
-  firstName: string;
-  id: number;
-  lastName: string;
+  id: string;
+  name: string;
 }

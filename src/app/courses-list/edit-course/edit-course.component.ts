@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CoursesService } from '@core/courses/courses.service';
-import { Course, CourseUpdateInfo } from '@shared/course';
+import { CourseUpdateInfo, Course } from '@shared/course';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from '@core/navigation/navigation.service';
 import { RouteName } from '@shared/route-name';
 import { Store } from '@ngrx/store';
 import { AppState, selectCourseDetails } from '@store/reducers';
 import { LoadCourseDetails, UpdateCourseDetails } from '@store/actions/course-details-page.actions';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'courses-edit-course',
@@ -32,8 +32,8 @@ export class EditCourseComponent implements OnInit {
   }
 
   // TODO Create Interceptor for errors
-  onSave(courseInfo: CourseUpdateInfo): void {
-    this.store.dispatch(new UpdateCourseDetails(this.id, courseInfo));
+  onSave(course: Course): void {
+    this.store.dispatch(new UpdateCourseDetails(course));
   }
 
   onCancel(): void {
