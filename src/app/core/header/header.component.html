@@ -1,17 +1,21 @@
 <header class="container d-flex my-2 justify-content-between">
-  <h1>Courses</h1>
+  <h1 translate>header.title</h1>
 
-  <a routerLink="/login"
-     class="btn btn-primary"
-     *ngIf="isLoginShown$ | async"
-  >Log in</a>
+  <a 
+    class="btn btn-primary"
+    routerLink="/login"
+    translate
+    *ngIf="isLoginShown$ | async"
+  >header.loging</a>
 
   <div *ngIf="isLoggedIn$ | async">
     <span>{{ user$ | async }}</span>
-    <button type="button"
-          class="btn btn-primary ml-2"
-          (click)="logOut()"
-    >Log out</button>
+    <button
+      type="button"
+      class="btn btn-primary ml-2"
+      translate
+      (click)="logOut()"
+    >header.logout</button>
   </div>
 
 </header>

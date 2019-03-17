@@ -1,0 +1,14 @@
+{
+  "header": {
+    "title": "Courses",
+    "login": "Log in",
+    "logout": "Log out"
+  },
+  "coursesList": {
+    "addCourse": "Add course",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noData": "Courses list is empty",
+    "loadMore": "Load more"
+  }
+}

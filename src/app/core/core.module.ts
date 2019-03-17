@@ -23,6 +23,7 @@ import { InputHighlightDirective } from './validation/input-highlight/input-high
 import { DateInputComponent } from './custom-controls/date-input/date-input.component';
 import { NumberInputComponent } from './custom-controls/number-input/number-input.component';
 import { CloudTagsInputComponent } from './custom-controls/cloud-tags-input/cloud-tags-input.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 library.add(faSpinner);
 
@@ -48,6 +49,7 @@ library.add(faSpinner);
     UtilsModule,
     FontAwesomeModule,
     NgbTypeaheadModule,
+    TranslateModule,
   ],
   exports: [
     HeaderComponent,
