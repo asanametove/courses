@@ -10,5 +10,9 @@
     "delete": "Delete",
     "noData": "Courses list is empty",
     "loadMore": "Load more"
+  },
+  "language": {
+    "en": "English",
+    "ru": "Russian"
   }
 }

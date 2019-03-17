@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { LanguageKey } from '@shared/language';
 
 @Component({
   selector: 'courses-root',
@@ -7,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
   constructor(translate: TranslateService) {
-    translate.setDefaultLang('en');
+    translate.setDefaultLang(LanguageKey.en);
+    translate.use(LanguageKey.en);
   }
 }
