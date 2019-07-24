@@ -5,4 +5,5 @@ export enum RouteName {
   NewCourse = 'courses/new',
   EditCourse = 'courses/:id',
   NotDefined = '**',
+  Queue = 'queue',
 }

@@ -1,0 +1,40 @@
+<section>
+  <form class="d-flex">
+    <input 
+      type="text"
+      class="form-control w-25 mr-2"
+      name="name"
+      placeholder="Name"
+      [(ngModel)]="name"
+    >
+
+    <select 
+      class="form-control w-25 mr-2"
+      name="currentQueue"
+      [(ngModel)]="currentQueue"
+    >
+      <option *ngFor="let queue of queueKeys">{{queue}}</option>
+    </select>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="addItemToQueue()"
+    >Add</button>
+
+    <button
+      type="button"
+      class="btn btn-danger ml-2"
+      (click)="removeItemFromQuery()"
+    >Remove</button>
+  </form>
+
+  <section class="d-flex justify-content-between mt-3">
+    <ul class="list-group">
+      <li
+        [class]="classNames"
+        *ngFor="let element of queue"
+      >{{element}}</li>
+    </ul>
+  </section>
+</section>

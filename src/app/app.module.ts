@@ -12,6 +12,7 @@ import { reducers, metaReducers } from './store/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
+import { QueueModule } from './queue/queue.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { EffectsModule } from '@ngrx/effects';
     BrowserModule,
     HttpClientModule,
     CoursesListModule,
+    QueueModule,
     CoreModule.forRoot(),
     FormsModule,
     AppRoutingModule,

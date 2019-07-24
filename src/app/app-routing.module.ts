@@ -3,10 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { RouteName } from '@shared/route-name';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 import { LoginComponent } from './core/login/login.component';
+import { QueueComponent } from './queue/queue.component';
 
 const routes: Routes = [
   { path: RouteName.Login, component: LoginComponent },
   { path: RouteName.Root, redirectTo: RouteName.Courses, pathMatch: 'full' },
+  { path: RouteName.Queue, component: QueueComponent },
   { path: RouteName.NotDefined, component: PageNotFoundComponent },
 ];
 
