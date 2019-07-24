@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTypeaheadModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -23,6 +23,7 @@ import { InputHighlightDirective } from './validation/input-highlight/input-high
 import { DateInputComponent } from './custom-controls/date-input/date-input.component';
 import { NumberInputComponent } from './custom-controls/number-input/number-input.component';
 import { CloudTagsInputComponent } from './custom-controls/cloud-tags-input/cloud-tags-input.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 library.add(faSpinner);
 
@@ -48,6 +49,8 @@ library.add(faSpinner);
     UtilsModule,
     FontAwesomeModule,
     NgbTypeaheadModule,
+    NgbDropdownModule,
+    TranslateModule,
   ],
   exports: [
     HeaderComponent,

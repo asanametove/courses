@@ -19,6 +19,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CoursesEffects } from '@store/effects/courses.effect';
 import { CoreModule } from '@core/core.module';
 import { AuthorsService } from '@core/authors.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 library.add(faStar);
 
@@ -46,6 +47,7 @@ library.add(faStar);
     FontAwesomeModule,
     CoursesRoutingModule,
     EffectsModule.forFeature([CoursesEffects]),
+    TranslateModule,
   ],
   providers: [
     FilterPipe,
