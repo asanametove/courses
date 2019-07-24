@@ -15,8 +15,16 @@
   <div class="card-body d-flex">
     <p class="flex-grow-1">{{course.description}}</p>
     <div class="d-flex flex-column">
-      <a [routerLink]="course.id" class="btn btn-sm btn-secondary m-1">Edit</a>
-      <button class="btn btn-sm btn-danger m-1" (click)="onDelete()">Delete</button>
+      <a
+        class="btn btn-sm btn-secondary m-1"
+        translate
+        [routerLink]="course.id"
+      >coursesList.edit</a>
+      <button
+        class="btn btn-sm btn-danger m-1"
+        translate
+        (click)="onDelete()"
+      >coursesList.delete</button>
     </div>
   </div>
 
