@@ -1,4 +1,4 @@
-<nav class="container" *ngIf="isVisible">
+<nav *ngIf="isVisible">
   <ul class="breadcrumb">
     <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs">
       <a *ngIf="breadcrumb.isActive">{{breadcrumb.title}}</a>
